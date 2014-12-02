@@ -46,9 +46,13 @@ namespace STLParserProject
             //chessBoard = figureList[0] as ChessBoard;
             //chessBoard.setFigureList(figureList);
             //chessBoard.setRequests(queue);
-            //PolyhedronMesh q = PlanetGenerator.PlanetGeneration.Plates.createPlanet(20, 5, 0.7, new PlanetGenerator.DoubleRandom());
-            //figureList.Add(Figure.fromPolyhedronMesh(PlanetGenerator.PlanetGeneration.Plates.createPlanet(20, 5, 0.7, new PlanetGenerator.DoubleRandom())));//Polyhedron.getDualPolyhedron(Icosahedron.generateSubdividedIcosahedron(10))));
-            //figureList.Add(Figure.fromPolyhedronMesh(Polyhedron.getDualPolyhedron(Icosahedron.generateSubdividedIcosahedron(4))));
+
+            PolyhedronMesh q = PlanetGenerator.PlanetGeneration.Plates.createPlanet(4, 3, 0.7, new PlanetGenerator.DoubleRandom());
+
+
+            //figureList.Add(Figure.fromPolyhedronMesh
+            //    (PlanetGenerator.PlanetGeneration.Plates.createPlanet(20, 5, 0.7, new PlanetGenerator.DoubleRandom()), 0, 0 , 0));//Polyhedron.getDualPolyhedron(Icosahedron.generateSubdividedIcosahedron(10))));
+            ////figureList.Add(Figure.fromPolyhedronMesh(Polyhedron.getDualPolyhedron(Icosahedron.generateSubdividedIcosahedron(4))));
             figureList.Add(figure);
             cameraList.Add(new Camera(new Point3D(0, 0, 0), new Point3D(410, 840, 0),
                 new Point3D(200, 400, 0)));//boardBuilder.getCamera());

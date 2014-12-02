@@ -51,8 +51,7 @@ namespace PlanetGenerator.SphereBuilder
 				     corner.tiles[j] = tiles[face.n[j]];
 			    }
             }
-            #endregion
-            
+            #endregion            
 
             #region borders
             for (var i = 0; i < borders.Length; ++i)
@@ -87,12 +86,11 @@ namespace PlanetGenerator.SphereBuilder
                     corner.corners[j] = corner.borders[j].oppositeCorner(corner);
                 }
             }
-
-
             
             //------------------------------
             //Random rng = new Random();
             #region tiles
+
             for (var i = 0; i < tiles.Length; ++i)
 		    {
 			    var tile = tiles[i];
@@ -101,11 +99,13 @@ namespace PlanetGenerator.SphereBuilder
                 {
                     tile.corners[j] = corners[node.f[j]];
                 }
+                
 			    for (var j = 0; j < node.e.Count; ++j)
 			    {
 				    var border = borders[node.e[j]];
 				    if (border.tiles[0].Equals(tile))
 				    {
+                        bool found = false;
 					    for (var k = 0; k < tile.corners.Length; ++k)
 					    {
 						    var corner0 = tile.corners[k];
@@ -121,11 +121,17 @@ namespace PlanetGenerator.SphereBuilder
 						    }
 						    tile.borders[k] = border;
 						    tile.tiles[k] = border.oppositeTile(tile);
+                            found = true;
 						    break;
 					    }
+                        if (!found)
+                        {
+                            int a = 9;
+                        }
 				    }
 				    else
 				    {
+                        bool found = false;
 					    for (var k = 0; k < tile.corners.Length; ++k)
 					    {
 						    var corner0 = tile.corners[k];
@@ -141,11 +147,17 @@ namespace PlanetGenerator.SphereBuilder
 						    }
 						    tile.borders[k] = border;
 						    tile.tiles[k] = border.oppositeTile(tile);
+                            found = true;
 						    break;
 					    }
+                        if (!found)
+                        {
+                            int a = 9;
+                        }
+
 				    }
 			    }
-
+                
 			    tile.averagePos = new Vector(0, 0, 0);
 			    for (var j = 0; j < tile.corners.Length; ++j)
 			    {

@@ -90,8 +90,11 @@ namespace PlanetGenerator.PlanetGeneration
                         var adjacentTile = tile.tiles[j];
                         if (adjacentTile.plate == null)
                         {
-                            platelessTiles.Add(adjacentTile);
-                            platelessTilePlates.Add(plate);
+                            if(!platelessTiles.Contains(adjacentTile))
+                            {
+                                platelessTiles.Add(adjacentTile);
+                                platelessTilePlates.Add(plate);
+                            }
                         }
                     }
                 }
@@ -120,10 +123,6 @@ namespace PlanetGenerator.PlanetGeneration
                                 platelessTiles.Add(tile.tiles[j]);
                                 platelessTilePlates.Add(plate);
                             }
-                            //if(!platelessTilePlates.Contains(plate))
-                            //{
-                            //    platelessTilePlates.Add(plate);
-                            //}
                         }
                     }
                 }
