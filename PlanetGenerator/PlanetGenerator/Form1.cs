@@ -47,14 +47,14 @@ namespace PlanetGenerator
             //meshss = PlanetGeneration.Plates.createPlanet(1, 1, 0.7, new DoubleRandom());
 
 
-
+            PolyhedronMesh q = PlanetGenerator.PlanetGeneration.Plates.createPlanet(8, 5, 0.5, new PlanetGenerator.DoubleRandom());
             UIData.ThreadCounts = 4;
             requests = new ConcurrentQueue<Request>();
             canvas = new Canvas(this.pbScene);
 
             PolyhedronMesh mesh = Polyhedron.getDualPolyhedron(Icosahedron.generateSubdividedIcosahedron(1));
 
-            facade = new Facade(canvas, requests, label1, Figure.fromPolyhedronMesh(mesh, (double)this.numericUpDown4.Value, (double)this.numericUpDown5.Value, (double)this.numericUpDown6.Value));
+            facade = new Facade(canvas, requests, label1, Figure.fromPolyhedronMesh(q, (double)this.numericUpDown4.Value, (double)this.numericUpDown5.Value, (double)this.numericUpDown6.Value));
             facade.canTransform = true;
             requests.Enqueue(new ScaleRequest(-1, SCALE_SIGN.MINUS, 0));
             int b = 0;

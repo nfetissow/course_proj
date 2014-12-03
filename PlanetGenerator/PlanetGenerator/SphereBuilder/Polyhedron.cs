@@ -94,11 +94,23 @@ namespace PlanetGenerator.SphereBuilder
             for (var i = 0; i < tiles.Length; ++i)
 		    {
 			    var tile = tiles[i];
+
+
 			    var node = icosahedron.nodes[i];
                 for (var j = 0; j < node.f.Count; ++j)
                 {
                     tile.corners[j] = corners[node.f[j]];
                 }
+
+
+                tile.averagePos = new Vector(0, 0, 0);
+                for (var j = 0; j < tile.corners.Length; ++j)
+                {
+                    tile.averagePos += tile.corners[j].pos;
+                }
+                tile.averagePos /= tile.corners.Length;
+
+                tile.sortCorners();
                 
 			    for (var j = 0; j < node.e.Count; ++j)
 			    {
@@ -132,24 +144,42 @@ namespace PlanetGenerator.SphereBuilder
 				    else
 				    {
                         bool found = false;
-					    for (var k = 0; k < tile.corners.Length; ++k)
-					    {
-						    var corner0 = tile.corners[k];
-						    var corner1 = tile.corners[(k + 1) % tile.corners.Length];
-						    if (border.corners[0].Equals(corner0) && border.corners[1].Equals(corner1))
-						    {
-							    border.corners[1] = corner0;
-							    border.corners[0] = corner1;
-						    }
-						    else if (!border.corners[1].Equals(corner0) || !border.corners[0].Equals(corner1.id))
-						    {
-							    continue;
-						    }
-						    tile.borders[k] = border;
-						    tile.tiles[k] = border.oppositeTile(tile);
+                        //for (var k = 0; k < tile.corners.Length; ++k)
+                        //{
+                        //    var corner0 = tile.corners[k];
+                        //    var corner1 = tile.corners[(k + 1) % tile.corners.Length];
+                        //    if (border.corners[0].Equals(corner0) && border.corners[1].Equals(corner1))
+                        //    {
+                        //        border.corners[1] = corner0;
+                        //        border.corners[0] = corner1;
+                        //    }
+                        //    else if (!border.corners[1].Equals(corner0) || !border.corners[0].Equals(corner1.id))
+                        //    {
+                        //        continue;
+                        //    }
+                        //    tile.borders[k] = border;
+                        //    tile.tiles[k] = border.oppositeTile(tile);
+                        //    found = true;
+                        //    break;
+                        //}
+                        for (var k = 0; k < tile.corners.Length; ++k)
+                        {
+                            var corner0 = tile.corners[k];
+                            var corner1 = tile.corners[(k + 1) % tile.corners.Length];
+                            if (border.corners[1].Equals(corner0) && border.corners[0].Equals(corner1))
+                            {
+                                border.corners[0] = corner0;
+                                border.corners[1] = corner1;
+                            }
+                            else if (!border.corners[0].Equals(corner0) || !border.corners[1].Equals(corner1))
+                            {
+                                continue;
+                            }
+                            tile.borders[k] = border;
+                            tile.tiles[k] = border.oppositeTile(tile);
                             found = true;
-						    break;
-					    }
+                            break;
+                        }
                         if (!found)
                         {
                             int a = 9;
@@ -158,12 +188,7 @@ namespace PlanetGenerator.SphereBuilder
 				    }
 			    }
                 
-			    tile.averagePos = new Vector(0, 0, 0);
-			    for (var j = 0; j < tile.corners.Length; ++j)
-			    {
-                    tile.averagePos += tile.corners[j].pos;
-			    }
-			    tile.averagePos /= tile.corners.Length;
+			    
 			
 			    double maxDistanceToCorner = 0;
 			    for (var j = 0; j < tile.corners.Length; ++j)
@@ -181,7 +206,7 @@ namespace PlanetGenerator.SphereBuilder
             #endregion
 
             var mesh =  new PolyhedronMesh(tiles, borders, corners);
-            return verifyIntegrity(mesh);
+            return mesh;//verifyIntegrity(mesh);
         }
 
         public static PolyhedronMesh verifyIntegrity(PolyhedronMesh mesh)

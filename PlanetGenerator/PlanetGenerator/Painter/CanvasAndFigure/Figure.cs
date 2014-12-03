@@ -289,32 +289,9 @@ namespace STLParserProject
 
             }
 
-
-            writeTriangles(triangles);
             var figure = new Figure(triangles.ToArray(), points, points, null, null);
             figure.transform(/*Matrix3D.getOffsetMatrix(-160, -160, 0) */ Matrix3D.getOffsetMatrix(x1, y1, z1));
             return figure;
-        }
-
-        static void writeTriangles(List<Triangle> triangles)
-        {
-            using(StreamWriter wr = File.CreateText("triangles.txt"))
-            {
-                foreach(Triangle t in triangles) 
-                {
-                    wr.WriteLine("<Triangle>\n");
-                    if(t.p1 == null)
-                    {
-                        wr.WriteLine("Null triangle!");
-                    }
-                    else
-                    {
-                        wr.WriteLine("\t<P1>{0}</P1>\n\t<P2>{1}</P2>\n\t<P3>{2}</P3>\n", t.p1.ToString(), t.p2.ToString(), t.p3.ToString());
-                    }
-                    wr.WriteLine("</Triangle>\n");
-                }
-                
-            }
         }
         
     }

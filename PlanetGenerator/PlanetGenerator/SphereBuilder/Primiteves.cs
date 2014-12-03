@@ -16,7 +16,7 @@ namespace PlanetGenerator.SphereBuilder
     }
 
 
-    public struct Node
+    public class Node
     {
         public Vector p;
         public List<int> e;
@@ -37,7 +37,7 @@ namespace PlanetGenerator.SphereBuilder
         }
     }
 
-    public struct Edge
+    public class Edge
     {
         public List<int> n;
         public List<int> f;
@@ -56,7 +56,7 @@ namespace PlanetGenerator.SphereBuilder
         }
     }
 
-    public struct Face
+    public class Face
     {
         public List<int> n;
         public List<int> e;
@@ -70,7 +70,7 @@ namespace PlanetGenerator.SphereBuilder
         }
     }
 
-    public struct Corner
+    public class Corner
     {
         public int id;
         public Vector pos;
@@ -90,7 +90,7 @@ namespace PlanetGenerator.SphereBuilder
         }   
     }
 
-    public struct Border
+    public class Border
     {
         public int id;
         public Vector midpoint;
@@ -124,7 +124,7 @@ namespace PlanetGenerator.SphereBuilder
         
     }
 
-    public struct Tile
+    public class Tile
     {
         public int id;
         public double D;
