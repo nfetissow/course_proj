@@ -34,3 +34,12 @@ C:\Users\Nikita\Documents\Новая папка\course_proj\PlanetGenerator\Plan
 C:\Users\Nikita\Documents\Новая папка\course_proj\PlanetGenerator\PlanetGenerator\obj\Debug\PlanetGenerator.Form1.resources
 C:\Users\Nikita\Documents\Новая папка\course_proj\PlanetGenerator\PlanetGenerator\obj\Debug\PlanetGenerator.Properties.Resources.resources
 C:\Users\Nikita\Documents\Новая папка\course_proj\PlanetGenerator\PlanetGenerator\obj\Debug\PlanetGenerator.csproj.GenerateResource.Cache
+C:\Users\Nikita\Documents\GitHub\course_proj\PlanetGenerator\PlanetGenerator\bin\Debug\PlanetGenerator.exe.config
+C:\Users\Nikita\Documents\GitHub\course_proj\PlanetGenerator\PlanetGenerator\obj\Debug\PlanetGenerator.exe
+C:\Users\Nikita\Documents\GitHub\course_proj\PlanetGenerator\PlanetGenerator\obj\Debug\PlanetGenerator.pdb
+C:\Users\Nikita\Documents\GitHub\course_proj\PlanetGenerator\PlanetGenerator\bin\Debug\PlanetGenerator.exe
+C:\Users\Nikita\Documents\GitHub\course_proj\PlanetGenerator\PlanetGenerator\bin\Debug\PlanetGenerator.pdb
+C:\Users\Nikita\Documents\GitHub\course_proj\PlanetGenerator\PlanetGenerator\obj\Debug\PlanetGenerator.csprojResolveAssemblyReference.cache
+C:\Users\Nikita\Documents\GitHub\course_proj\PlanetGenerator\PlanetGenerator\obj\Debug\PlanetGenerator.Form1.resources
+C:\Users\Nikita\Documents\GitHub\course_proj\PlanetGenerator\PlanetGenerator\obj\Debug\PlanetGenerator.Properties.Resources.resources
+C:\Users\Nikita\Documents\GitHub\course_proj\PlanetGenerator\PlanetGenerator\obj\Debug\PlanetGenerator.csproj.GenerateResource.Cache

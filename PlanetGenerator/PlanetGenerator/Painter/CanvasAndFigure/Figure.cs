@@ -248,29 +248,29 @@ namespace STLParserProject
 
             var triangles = new Triangle[mesh.faces.Length];
             var points = new Point3D[mesh.nodes.Length];
-            double mult = 50;
-            double offset = 100;
+            double mult = 150;
+            double offset = 0;
             for (int i = 0; i < mesh.nodes.Length; ++i)
             {
                 points[i] = new Point3D(offset+ mesh.nodes[i].p.x * mult,offset+ mesh.nodes[i].p.y * mult,offset+ mesh.nodes[i].p.z * mult);
             }
             for (int i = 0; i < mesh.faces.Length; ++i)
             {
-                triangles[i] = new Triangle(points, mesh.faces[i].n[0], mesh.faces[i].n[1], mesh.faces[i].n[2], rng.Next(0, 255));
+                triangles[i] = new Triangle(points, mesh.faces[i].n[0], mesh.faces[i].n[1], mesh.faces[i].n[2], rng.Next(Int32.MinValue, Int32.MaxValue));
             }
 
             var figure = new Figure(triangles, points, points, null, null);
-            figure.transform(Matrix3D.getOffsetMatrix(-160, -160, 0)* Matrix3D.getOffsetMatrix(320, 320, 0));
+            figure.transform(Matrix3D.getOffsetMatrix(410, 840, 0));
             return figure;
         }
 
-        public static Figure fromPolyhedronMesh(PolyhedronMesh mesh, double x1, double y1, double z1)
+        public static Figure fromPolyhedronMesh(PolyhedronMesh mesh, double x1, double y1, double z1, int color1, int color2)
         {
             Random rng = new Random();
             var points = new Point3D[mesh.corners.Length];
             var triangles = new List<Triangle>();
             double mult = 100;
-            double offset = 200;
+            double offset = 0;
             for (int i = 0; i < mesh.corners.Length; ++i)
             {
                 points[i] = new Point3D(offset + mesh.corners[i].pos.x * mult, offset + mesh.corners[i].pos.y * mult, mesh.corners[i].pos.z * mult);
@@ -284,7 +284,7 @@ namespace STLParserProject
                 for(int i = t.corners.Length -2; i > 0; --i)
                 {
 
-                    triangles.Add(new Triangle(points, t.corners[t.corners.Length - 1].id, t.corners[i].id, t.corners[i - 1].id, k));//t.plate.oceanic? 255: 125));
+                    triangles.Add(new Triangle(points, t.corners[t.corners.Length - 1].id, t.corners[i].id, t.corners[i - 1].id, t.plate.oceanic ? 0x1919CC : 0x9D5632));
                 }
 
             }
