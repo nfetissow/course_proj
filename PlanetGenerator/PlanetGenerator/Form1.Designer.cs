@@ -44,6 +44,7 @@
             this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
             this.nudColor1 = new System.Windows.Forms.NumericUpDown();
             this.nudColor2 = new System.Windows.Forms.NumericUpDown();
+            this.viewType = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbScene)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -101,7 +102,7 @@
             // 
             this.numericUpDown1.Location = new System.Drawing.Point(830, 175);
             this.numericUpDown1.Maximum = new decimal(new int[] {
-            20,
+            30,
             0,
             0,
             0});
@@ -269,11 +270,23 @@
             0,
             -2147483648});
             // 
+            // viewType
+            // 
+            this.viewType.FormattingEnabled = true;
+            this.viewType.Items.AddRange(new object[] {
+            "Elevation",
+            "Plates"});
+            this.viewType.Location = new System.Drawing.Point(1051, 324);
+            this.viewType.Name = "viewType";
+            this.viewType.Size = new System.Drawing.Size(121, 21);
+            this.viewType.TabIndex = 16;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1285, 750);
+            this.Controls.Add(this.viewType);
             this.Controls.Add(this.nudColor2);
             this.Controls.Add(this.nudColor1);
             this.Controls.Add(this.numericUpDown6);
@@ -325,6 +338,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown6;
         private System.Windows.Forms.NumericUpDown nudColor1;
         private System.Windows.Forms.NumericUpDown nudColor2;
+        private System.Windows.Forms.ComboBox viewType;
     }
 }
 

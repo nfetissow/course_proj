@@ -11,12 +11,7 @@ namespace PlanetGenerator.PlanetGeneration
     class Plates
     {
 
-        public static PolyhedronMesh createPlanet(int subDivisionCount, int plateCount, double oceanicRate, DoubleRandom rng)
-        {
-            PolyhedronMesh topology = Polyhedron.getDualPolyhedron(Icosahedron.generateSubdividedIcosahedron(subDivisionCount));
-            createPlates(topology, plateCount, oceanicRate, rng);
-            return topology;
-        }
+        
 
         public static void fixTiles(Tile[] tiles)
         {
@@ -65,8 +60,7 @@ namespace PlanetGenerator.PlanetGeneration
                 failedCount = 0;
 			
                 var oceanic = (rng.NextDouble() < oceanicRate);
-                var plate = new Plate(
-                    Color.FromArgb(rng.Next(0, 255), rng.Next(0, 255), rng.Next(0, 255)),
+                var plate = new Plate(rng.Next(0, 0xFFFFFF),
                     randomUnitVector(rng),
                     rng.NextDouble(-Math.PI / 30, Math.PI / 30),
                     rng.NextDouble(-Math.PI / 30, Math.PI / 30),
@@ -153,7 +147,7 @@ namespace PlanetGenerator.PlanetGeneration
 			        var front = distanceCornerQueue[i];
 			        var corner = front.corner;
 			        var distanceToPlateRoot = front.distanceToPlateRoot;
-			        if (corner.distanceToRoot == -1 || corner.distanceToRoot > distanceToPlateRoot)
+			        if (Double.IsNaN(corner.distanceToRoot) || corner.distanceToRoot > distanceToPlateRoot)
 			        {
 				        corner.distanceToRoot = distanceToPlateRoot;
 				        for (var j = 0; j < corner.corners.Length; ++j)
@@ -180,7 +174,7 @@ namespace PlanetGenerator.PlanetGeneration
 
     public class Plate
     {
-        public Color color;
+        public int color;
         public Vector driftAxis;
         public double driftRate;
         public double spinRate;
@@ -188,9 +182,9 @@ namespace PlanetGenerator.PlanetGeneration
         public bool oceanic;
         public Corner root;
         public List<Tile> tiles;
-        public List<Corner> boudaryCorners;
+        public List<Corner> boundaryCorners;
         public List<Border> boundaryBorders;
-        public Plate(Color c, Vector driftAxis, double driftRate, double spinRate, double elevation, bool oceanic, Corner root)
+        public Plate(int c, Vector driftAxis, double driftRate, double spinRate, double elevation, bool oceanic, Corner root)
         {
             this.color = c;
             this.driftAxis = driftAxis;
@@ -200,8 +194,15 @@ namespace PlanetGenerator.PlanetGeneration
             this.oceanic = oceanic;
             this.root = root;
             tiles = new List<Tile>();
-            boudaryCorners = new List<Corner>();
+            boundaryCorners = new List<Corner>();
             boundaryBorders = new List<Border>();
+        }
+
+        public Vector CalculateMovement(Vector position)
+        {
+            Vector movement = this.driftAxis.Cross(position).Normalize() * (this.driftRate * (position.projectOnVector(this.driftAxis) - position).Magnitude());
+            movement = movement + (this.root.pos.Cross(position).Normalize() * (this.spinRate * (position.projectOnVector(this.root.pos) - position).Magnitude()));
+            return movement;
         }
     }
 

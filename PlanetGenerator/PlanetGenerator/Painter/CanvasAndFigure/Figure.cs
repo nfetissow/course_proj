@@ -264,12 +264,15 @@ namespace STLParserProject
             return figure;
         }
 
-        public static Figure fromPolyhedronMesh(PolyhedronMesh mesh, double x1, double y1, double z1, int color1, int color2)
+        
+
+
+        public static Figure fromPolyhedronMesh(PolyhedronMesh mesh, double x1, double y1, double z1, Polyhedron.determineColor color)
         {
             Random rng = new Random();
             var points = new Point3D[mesh.corners.Length];
             var triangles = new List<Triangle>();
-            double mult = 100;
+            double mult = 200;
             double offset = 0;
             for (int i = 0; i < mesh.corners.Length; ++i)
             {
@@ -284,7 +287,7 @@ namespace STLParserProject
                 for(int i = t.corners.Length -2; i > 0; --i)
                 {
 
-                    triangles.Add(new Triangle(points, t.corners[t.corners.Length - 1].id, t.corners[i].id, t.corners[i - 1].id, t.plate.oceanic ? 0x1919CC : 0x9D5632));
+                    triangles.Add(new Triangle(points, t.corners[t.corners.Length - 1].id, t.corners[i].id, t.corners[i - 1].id, color(t)));//t.plate.oceanic ? 0x1919CC : 0x9D5632));
                 }
 
             }

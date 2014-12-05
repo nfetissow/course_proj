@@ -78,6 +78,11 @@ namespace PlanetGenerator.SphereBuilder
         public Border[] borders;
         public Tile[] tiles;
         public double distanceToRoot;
+        public double distanceToPlateBoundary;
+        public double pressure;
+        public double shear;
+        public double elevation;
+        public bool betweenPlates;
 
         public Corner(int id, Vector position, int cornerCount, int borderCount, int tileCount)
         {
@@ -86,8 +91,17 @@ namespace PlanetGenerator.SphereBuilder
             corners = new Corner[cornerCount];
             borders = new Border[borderCount];
             tiles = new Tile[tileCount];
-            distanceToRoot = -1;
+            distanceToRoot = Double.NaN;
+            distanceToPlateBoundary = Double.NaN;
+            elevation = Double.NaN;
+            shear = Double.NaN;
+            pressure = Double.NaN;
+            betweenPlates = false;
         }   
+        public Vector vectorTo(Corner corner)
+        {
+            return corner.pos - this.pos;
+        }
     }
 
     public class Border
@@ -97,6 +111,7 @@ namespace PlanetGenerator.SphereBuilder
         public Corner[] corners;
         public Border[] borders;
         public Tile[] tiles;
+        public bool betweenPlates;
 
         public Border(int id, int cornerCount, int borderCount, int tileCount)
         {
@@ -105,6 +120,7 @@ namespace PlanetGenerator.SphereBuilder
             corners = new Corner[cornerCount];
             borders = new Border[borderCount];
             tiles = new Tile[tileCount];
+            betweenPlates = false;
         }
 
         public Corner oppositeCorner(Corner corner)
@@ -137,6 +153,7 @@ namespace PlanetGenerator.SphereBuilder
         public double maxDistanceToCorner;
         public Color color;
         public Plate plate;
+        public double elevation;
         public Tile(int id, Vector position, int cornerCount, int borderCount, int tileCount)
         {
             this.id = id;

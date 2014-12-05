@@ -51,11 +51,11 @@ namespace PlanetGenerator
             UIData.ThreadCounts = 4;
             requests = new ConcurrentQueue<Request>();
             canvas = new Canvas(this.pbScene);
-
+            this.viewType.SelectedIndex = 0;
             //PolyhedronMesh mesh = Polyhedron.getDualPolyhedron(Icosahedron.generateSubdividedIcosahedron(1));
 
-            PolyhedronMesh q = PlanetGenerator.PlanetGeneration.Plates.createPlanet(8, 5, 0.5, new PlanetGenerator.DoubleRandom());
-            facade = new Facade(canvas, requests, label1, Figure.fromPolyhedronMesh(q, (double)this.numericUpDown4.Value, (double)this.numericUpDown5.Value, (double)this.numericUpDown6.Value, (int)this.nudColor1.Value, (int)this.nudColor2.Value));
+            PolyhedronMesh q = PlanetGenerator.PlanetGeneration.Planet.createPlanet(8, 5, 0.5, new PlanetGenerator.DoubleRandom());
+            facade = new Facade(canvas, requests, label1, Figure.fromPolyhedronMesh(q, (double)this.numericUpDown4.Value, (double)this.numericUpDown5.Value, (double)this.numericUpDown6.Value, this.viewType.SelectedIndex == 0 ? Polyhedron.showElevation : Polyhedron.showPlates));
             facade.canTransform = true;
             requests.Enqueue(new ScaleRequest(-1, SCALE_SIGN.MINUS, 0));
             int b = 0;
@@ -127,12 +127,12 @@ namespace PlanetGenerator
             
 
             //PolyhedronMesh mesh = Polyhedron.getDualPolyhedron(traMesh);
-            PolyhedronMesh q = PlanetGenerator.PlanetGeneration.Plates.createPlanet(8, 5, 0.5, new PlanetGenerator.DoubleRandom());
+            PolyhedronMesh q = PlanetGenerator.PlanetGeneration.Planet.createPlanet((int)this.numericUpDown1.Value, 50, 0.5, new PlanetGenerator.DoubleRandom());
             
             requests = new ConcurrentQueue<Request>();
             canvas = new Canvas(this.pbScene);
             //facade = new Facade(canvas, requests, label1, Figure.fromPolyhedronMesh(mesh, (double)this.numericUpDown4.Value, (double)this.numericUpDown5.Value, (double)this.numericUpDown6.Value));
-            facade = new Facade(canvas, requests, label1, Figure.fromPolyhedronMesh(q, (double)this.numericUpDown4.Value, (double)this.numericUpDown5.Value, (double)this.numericUpDown6.Value, (int)this.nudColor1.Value, (int)this.nudColor2.Value));
+            facade = new Facade(canvas, requests, label1, Figure.fromPolyhedronMesh(q, (double)this.numericUpDown4.Value, (double)this.numericUpDown5.Value, (double)this.numericUpDown6.Value, this.viewType.SelectedIndex == 0 ? Polyhedron.showElevation : Polyhedron.showPlates));
             facade.canTransform = true;
             requests.Enqueue(new ScaleRequest(-1, SCALE_SIGN.MINUS, 0));
         }

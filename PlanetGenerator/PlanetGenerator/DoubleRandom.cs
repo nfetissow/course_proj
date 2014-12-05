@@ -14,7 +14,8 @@ namespace PlanetGenerator
 
         public double NextDouble(double d1, double d2)
         {
-            return d1 + (d2 - d1) * this.NextDouble();
+            double q = d1 + (d2 - d1) * this.NextDouble();
+            return q;
         }
         public double Unit()
         {

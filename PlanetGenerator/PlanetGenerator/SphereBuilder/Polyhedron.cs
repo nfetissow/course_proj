@@ -8,6 +8,36 @@ namespace PlanetGenerator.SphereBuilder
 {
     class Polyhedron
     {
+        public delegate int determineColor(Tile tile);
+
+        public static determineColor showElevation = (Tile tile) =>
+        {
+            if(tile.elevation < 0)
+            {
+                if (tile.elevation > -0.3) return 0x0000FB;
+                else if (tile.elevation > -0.4) return 0x0000CD;
+                else return 0x0000AB;
+                    
+            } 
+            else if (tile.elevation < 0.2)
+            {
+                return 0x7a5230;
+            } else if(tile.elevation < 0.4)
+            {
+                return 0x614126;
+            }
+            else
+            {
+                return 0x49311c;
+            }
+        };
+
+        public static determineColor showPlates = (Tile tile) =>
+        {
+            return tile.plate.color;
+        };
+
+
         public static PolyhedronMesh getDualPolyhedron(TriangleMesh icosahedron)
         {
             Corner[] corners = new Corner[icosahedron.faces.Length];

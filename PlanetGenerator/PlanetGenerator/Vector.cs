@@ -119,5 +119,9 @@ namespace PlanetGenerator
             this.x = x;
             this.y = y;
         }
+        public Vector projectOnVector(Vector vector)
+        {
+            return vector.Normalize() * vector.Normalize().Dot(this);
+        }
     }
 }

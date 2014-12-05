@@ -47,7 +47,7 @@ namespace STLParserProject
             //chessBoard.setFigureList(figureList);
             //chessBoard.setRequests(queue);
 
-            PolyhedronMesh q = PlanetGenerator.PlanetGeneration.Plates.createPlanet(4, 3, 0.7, new PlanetGenerator.DoubleRandom());
+           // PolyhedronMesh q = PlanetGenerator.PlanetGeneration.Planet.createPlanet(4, 3, 0.7, new PlanetGenerator.DoubleRandom());
 
 
             //figureList.Add(Figure.fromPolyhedronMesh

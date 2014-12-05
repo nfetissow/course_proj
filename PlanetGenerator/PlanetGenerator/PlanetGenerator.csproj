@@ -91,6 +91,8 @@
     <Compile Include="Painter\Transmitting\TransmittingData.cs" />
     <Compile Include="Painter\Transmitting\ZBufferData.cs" />
     <Compile Include="Painter\UIData.cs" />
+    <Compile Include="PlanetGeneration\Planet.cs" />
+    <Compile Include="PlanetGeneration\Elevation.cs" />
     <Compile Include="PlanetGeneration\Plates.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
