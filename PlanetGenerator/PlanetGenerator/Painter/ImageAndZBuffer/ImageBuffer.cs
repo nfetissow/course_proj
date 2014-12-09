@@ -22,11 +22,13 @@ namespace STLParserProject
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         private unsafe void clearBuffers(int* bits)
         {
-            int color = Color.White.ToArgb();
+            Random rng = new Random();
+            int color1 = Color.Black.ToArgb();
+            int color2 = Color.White.ToArgb();
             for (int i = 0; i < frameHeight; i++)
                 for (int j = 0; j < frameWidth; j++)
                 {
-                    bits[i * frameWidth + j] = color;
+                    bits[i * frameWidth + j] = rng.NextDouble() < 0.9999 ? color1 : color2;
                     zbits[i * frameWidth + j] = 1000000;
                 }
         }

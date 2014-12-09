@@ -49,6 +49,14 @@ namespace PlanetGenerator
         
         public static Vector Lerp(Vector v1, Vector v2, double t)
         {
+            if(t > 1)
+            {
+                t = 1;
+            }
+            else if (t < 0)
+            {
+                t = 0;
+            }
             return (v1 + (v2 - v1) * t);
         }
 
@@ -122,6 +130,16 @@ namespace PlanetGenerator
         public Vector projectOnVector(Vector vector)
         {
             return vector.Normalize() * vector.Normalize().Dot(this);
+        }
+
+        public Vector applyAxisAngle(Vector axis, double angle)
+        {
+            return this * Math.Cos(angle) + (axis * this) * Math.Sin(angle) + axis * (axis.Dot(this)) * (1 - Math.Cos(angle));
+        }
+
+        public double angleTo(Vector other)
+        {
+            return Math.Acos(this.Dot(other)/(other.Magnitude()*this.Magnitude()));
         }
     }
 }

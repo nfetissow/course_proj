@@ -27,6 +27,16 @@ namespace STLParserProject
         public static double LightSourceAmp { get; set; }
         public static Figure SelectedFigure { get; set; }
         public static Point SelectedFigurePos { get; set; }
+
+
+        public static String surfaceDisplaySettings { get; set; }
+        public static int tesselationLevel { get; set; }
+        public static double distortionLevel { get; set; }
+        public static int tectonicPlateCount { get; set; }
+        public static double oceanicRate { get; set; }
+        public static double heatLevel { get; set; }
+        public static double moistureLevel { get; set; }
+        public static int randomSeed { get; set; }
         // events
     }
 }

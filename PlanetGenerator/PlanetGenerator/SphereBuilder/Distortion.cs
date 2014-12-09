@@ -8,20 +8,20 @@ namespace PlanetGenerator.SphereBuilder
 {
     class Distortion
     {
-        public static int getEdgeOppositeFaceIndex(Edge edge, int faceIndex)
+        private static int getEdgeOppositeFaceIndex(Edge edge, int faceIndex)
         {
     	    if (edge.f[0] == faceIndex) return edge.f[1];
 	        if (edge.f[1] == faceIndex) return edge.f[0];
             throw new ArgumentOutOfRangeException("faceIndex");
         }
-        public static int getFaceOppositeNodeIndex(Face face, Edge edge)
+        private static int getFaceOppositeNodeIndex(Face face, Edge edge)
         {
 	        if (face.n[0] != edge.n[0] && face.n[0] != edge.n[1]) return 0;
 	        if (face.n[1] != edge.n[0] && face.n[1] != edge.n[1]) return 1;
 	        if (face.n[2] != edge.n[0] && face.n[2] != edge.n[1]) return 2;
             throw new ArgumentOutOfRangeException("edge");
         }
-        public static int findNextFaceIndex(TriangleMesh mesh, int nodeIndex, int faceIndex)
+        private static int findNextFaceIndex(TriangleMesh mesh, int nodeIndex, int faceIndex)
         {
 	        var node = mesh.nodes[nodeIndex];
 	        var face = mesh.faces[faceIndex];
@@ -30,9 +30,9 @@ namespace PlanetGenerator.SphereBuilder
 	        return getEdgeOppositeFaceIndex(edge, faceIndex);
         }
 
-        public delegate bool Predicate(Node oldNode0, Node oldNode1, Node newNode0, Node newNode1);
+        private delegate bool Predicate(Node oldNode0, Node oldNode1, Node newNode0, Node newNode1);
 
-        public static bool conditionalRotateEdge(TriangleMesh mesh, int edgeIndex,  Predicate predicate)
+        private static bool conditionalRotateEdge(TriangleMesh mesh, int edgeIndex, Predicate predicate)
         {
 	        var edge = mesh.edges[edgeIndex];
 	        var face0 = mesh.faces[edge.f[0]];
@@ -82,7 +82,7 @@ namespace PlanetGenerator.SphereBuilder
 	        return true;
         }
 
-        public static bool distortMesh(TriangleMesh mesh, int degree, Random random)
+        public static bool distortMesh(TriangleMesh mesh, int degree, DoubleRandom random)
         {
 	        var totalSurfaceArea = 4 * Math.PI;
 	        var idealFaceArea = totalSurfaceArea / mesh.faces.Length;
@@ -112,7 +112,7 @@ namespace PlanetGenerator.SphereBuilder
             for(int i = 0; i < degree; ++i)
             {
                 int consecutiveFailedAttempts = 0;
-                int edgeIndex = random.Next(0, mesh.edges.Length);
+                int edgeIndex = random.nextExclusive(0, mesh.edges.Length);
                 //Здесь был excluding random!!
                 while (!conditionalRotateEdge(mesh, edgeIndex, rotationPredicate))
                 {
@@ -133,7 +133,7 @@ namespace PlanetGenerator.SphereBuilder
             Vector[] pointShifts = new Vector[mesh.nodes.Length];
             for (var i = 0; i < mesh.nodes.Length; ++i)
             {
-                pointShifts[i] = new Vector();
+                pointShifts[i] = new Vector(0,0,0);
             }
 	        
             for(int i = 0; i <mesh.faces.Length; ++i)
@@ -145,10 +145,7 @@ namespace PlanetGenerator.SphereBuilder
 		        var p0 = n0.p;
 		        var p1 = n1.p;
 		        var p2 = n2.p;
-		        var e0 = (p1 - p0).Magnitude() / idealEdgeLength;
-		        var e1 = (p2 - p1).Magnitude() / idealEdgeLength;
-		        var e2 = (p0 - p2).Magnitude() / idealEdgeLength;
-		        var centroid = Polyhedron.calculateFaceCentroid(p0, p1, p2).Normalize();
+		        var centroid = calculateFaceCentroid(p0, p1, p2).Normalize();
 		        Vector v0 = centroid - p0;
 		        Vector v1 = centroid - p1;
 		        Vector v2 = centroid - p2;
@@ -159,30 +156,22 @@ namespace PlanetGenerator.SphereBuilder
 		        v0 = v0*(multiplier * (length0 - idealDistanceToCentroid) / length0);
 		        v1 = v1*(multiplier * (length1 - idealDistanceToCentroid) / length1);
 		        v2 = v2*(multiplier * (length2 - idealDistanceToCentroid) / length2);
-		        pointShifts[face.n[0]] += v0;
-		        pointShifts[face.n[1]] += v1;
-		        pointShifts[face.n[2]] += v2;
+		        pointShifts[face.n[0]] = pointShifts[face.n[0]] + v0;
+		        pointShifts[face.n[1]] = pointShifts[face.n[1]] + v1;
+		        pointShifts[face.n[2]] = pointShifts[face.n[2]] + v2;
             }
 
-            
 
-	
-	        var origin = new Vector();
-	        //var plane = new THREE.Plane();
-            //action.executeSubaction(function(action)
-            //{
-            //    for (var i = 0; i < mesh.nodes.length; ++i)
-            //    {
-            //        plane.setFromNormalAndCoplanarPoint(mesh.nodes[i].p, origin);
-            //        pointShifts[i] = mesh.nodes[i].p.clone().add(plane.projectPoint(pointShifts[i])).normalize();
-            //    }
-            //}, mesh.nodes.length / 10);
 
-            //var rotationSupressions = new Array(mesh.nodes.length);
-            //for (var i = 0; i < mesh.nodes.length; ++i)
-            //    rotationSupressions[i] = 0;
 
-            var rotationSupressions = new int[mesh.nodes.Length];
+            var origin = new Vector(0, 0, 0);
+            for (var i = 0; i < mesh.nodes.Length; ++i)
+            {
+                origin = mesh.nodes[i].p;
+                pointShifts[i] = mesh.nodes[i].p + ProjectPoint(pointShifts[i], mesh.nodes[i].p, origin).Normalize();
+            }
+                       
+            var rotationSupressions = new double[mesh.nodes.Length];
 	
             for(int i = 0; i < mesh.edges.Length; ++i) 
             {
@@ -196,8 +185,8 @@ namespace PlanetGenerator.SphereBuilder
 		        double suppression = (1 - oldVector.Dot(newVector)) * 0.5;
 
                 //Сравенение даблов и интов, обрати внимание!
-		        rotationSupressions[edge.n[0]] = Math.Max(rotationSupressions[edge.n[0]], (int) suppression);
-		        rotationSupressions[edge.n[1]] = Math.Max(rotationSupressions[edge.n[1]], (int) suppression);
+		        rotationSupressions[edge.n[0]] = Math.Max(rotationSupressions[edge.n[0]], suppression);
+		        rotationSupressions[edge.n[1]] = Math.Max(rotationSupressions[edge.n[1]], suppression);
             }
 
 	        
@@ -207,15 +196,86 @@ namespace PlanetGenerator.SphereBuilder
 		    for (var i = 0; i < mesh.nodes.Length; ++i)
 		    {
 			    var node = mesh.nodes[i];
-			    var point = node.p;
-			    var delta = point.Clone();
-                point = Vector.Lerp(point, pointShifts[i], 1 - Math.Sqrt(rotationSupressions[i])).Normalize();
-                delta = delta - point;
+			    //var point = node.p;
+                var delta = node.p.Clone();
+                node.p = Vector.Lerp(node.p, pointShifts[i], 1 - Math.Sqrt(rotationSupressions[i])).Normalize();
+                
+                //point = point.Normalize();
+                delta = delta - node.p;
+                
 			    totalShift += delta.Magnitude();
 		    }
 	        
 	
 	        return totalShift;
         }
+
+
+        public static void distortAndRelaxMesh(TriangleMesh mesh, double distortionRate, DoubleRandom random)
+        {
+            var totalDistortion = Math.Ceiling(mesh.edges.Length * distortionRate);
+            for(int remainingIterations = 6; remainingIterations > -1; --remainingIterations)
+            {
+                int iterationDistortion = (int) Math.Floor(totalDistortion / remainingIterations);
+                totalDistortion -= iterationDistortion;
+                distortMesh(mesh, iterationDistortion, random);
+                relaxMesh(mesh, 0.5);
+            }
+
+            var averageNodeRadius = Math.Sqrt(4 * Math.PI / mesh.nodes.Length);
+		    var minShiftDelta = averageNodeRadius / 50000 * mesh.nodes.Length;
+		    var maxShiftDelta = averageNodeRadius / 50 * mesh.nodes.Length;
+
+            double priorShift;
+            double currentShift = relaxMesh(mesh, 0.5);
+            double shiftDelta;
+            int numOfIterations = 0;
+            do
+            {
+                if (numOfIterations++ > 1000)
+                    break;
+                priorShift = currentShift;
+                currentShift = relaxMesh(mesh, 0.5);
+                shiftDelta = Math.Abs(currentShift - priorShift);
+            } while (shiftDelta >= minShiftDelta);
+
+            for (var i = 0; i < mesh.faces.Length; ++i)
+            {
+                var face = mesh.faces[i];
+                var p0 = mesh.nodes[face.n[0]].p;
+                var p1 = mesh.nodes[face.n[1]].p;
+                var p2 = mesh.nodes[face.n[2]].p;
+                face.centroid = calculateFaceCentroid(p0, p1, p2).Normalize();
+            }
+
+            for (var i = 0; i < mesh.nodes.Length; ++i)
+            {
+                var node = mesh.nodes[i];
+                var faceIndex = node.f[0];
+                for (var j = 1; j < node.f.Count - 1; ++j)
+                {
+                    faceIndex = findNextFaceIndex(mesh, i, faceIndex);
+                    var k = node.f.IndexOf(faceIndex);
+                    node.f[k] = node.f[j];
+                    node.f[j] = faceIndex;
+                }
+            }
+            
+        }
+
+        private static Vector ProjectPoint(Vector point, Vector normal, Vector origin)
+        {
+            Vector v = point - origin;
+            double dist = v.Dot(normal.Normalize());
+            return point - normal.Normalize()*dist;
+        }
+        private static Vector calculateFaceCentroid(Vector pa, Vector pb, Vector pc)
+        {
+            var vabHalf = (pb - pa) / 2;
+            var pabHalf = pa + vabHalf;
+            var centroid = (pc - pabHalf) / 3 + pabHalf;
+            return centroid;
+        }
+
     }
 }

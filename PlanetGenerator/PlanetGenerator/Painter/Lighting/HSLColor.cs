@@ -166,13 +166,15 @@ namespace STLParserProject
     struct HSLM
     {
         double H, S, L, minL;
+        int color;
 
         public HSLM(int color)
         {
 //             this.minL = minL; 
-            double R = ((color & 0x00FF0000) >> 16) / 255.0;
-            double G = ((color & 0x0000FF00) >> 8) / 255.0;
-            double B = (color & 0x000000FF) / 255.0;
+            this.color = color;
+            double R = ((color & 0xFF0000) >> 16) / 255.0;
+            double G = ((color & 0x00FF00) >> 8) / 255.0;
+            double B = (color & 0x0000FF) / 255.0;
 
             double MIN = min(R, G, B);
             double MAX = max(R, G, B);
@@ -180,7 +182,7 @@ namespace STLParserProject
 
             L = 0.5 * (MAX + MIN);
 
-            if (L == 0)
+            if (L == 0 || L == 1)
             {
                 H = 0; S = 0;
             }
@@ -198,8 +200,8 @@ namespace STLParserProject
                 else
                     H = 4 + (R - G) / (delta);
                 H /= 6;
-//                 H = H < 0 ? H + 6 : H;
-//                 H *= 60;
+                //                 H = H < 0 ? H + 6 : H;
+                //                 H *= 60;
             }
 
             if (H < 0) H = 0; if (H > 360) H = 360;

@@ -9,17 +9,36 @@ namespace PlanetGenerator
     //Classic Random class does not contain method to generate Random double value within specified range
     class DoubleRandom: Random
     {
-        public DoubleRandom() : base() { }
-        public DoubleRandom(int seed) : base(seed) { }
-
+        public DoubleRandom() : base() { selectedValues = new HashSet<int>(); }
+        public DoubleRandom(int seed) : base(seed) { selectedValues = new HashSet<int>(); }
+        private HashSet<int> selectedValues;
         public double NextDouble(double d1, double d2)
         {
             double q = d1 + (d2 - d1) * this.NextDouble();
             return q;
         }
-        public double Unit()
+        
+        public int nextExclusive(int minValue, int maxValue)
         {
-            return (double) this.Next() / 0x80000000;
+            return nextExclusive(minValue, maxValue, 0);
+        }
+
+        private int nextExclusive(int minValue, int maxValue, int succesiveFailures)
+        {
+            if(succesiveFailures > 1000)
+            {
+                throw new ArgumentException("No values left");
+            }
+            int q = this.Next(minValue, maxValue);
+            if (!selectedValues.Contains(q))
+            {
+                selectedValues.Add(q);
+                return q;
+            }
+            else
+            {
+                return nextExclusive(minValue, maxValue, succesiveFailures+1);
+            }
         }
     }
 }

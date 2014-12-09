@@ -60,7 +60,7 @@ namespace PlanetGenerator.SphereBuilder
     {
         public List<int> n;
         public List<int> e;
-
+        public Vector centroid;
         public Face(int n1, int n2, int n3, int e1, int e2, int e3)
         {
             e = new List<int>();
@@ -77,13 +77,31 @@ namespace PlanetGenerator.SphereBuilder
         public Corner[] corners;
         public Border[] borders;
         public Tile[] tiles;
+        public double area;
         public double distanceToRoot;
         public double distanceToPlateBoundary;
         public double pressure;
         public double shear;
         public double elevation;
         public bool betweenPlates;
+        public Vector airCurrent;
+        public double airCurrentSpeed;
+        public double[] airCurrentOutflows;
 
+        public double airHeat;
+        public double heat;
+        public double maxHeat;
+        public double heatAbsorption;
+        public double newAirHeat;
+
+        public double airMoisture;
+        public double newAirMoisture;
+        public double precipitation;
+        public double precipitationRate;
+        public double maxPrecipitation;
+        public double moisture;
+
+        public double temperature;
         public Corner(int id, Vector position, int cornerCount, int borderCount, int tileCount)
         {
             this.id = id;
@@ -97,6 +115,15 @@ namespace PlanetGenerator.SphereBuilder
             shear = Double.NaN;
             pressure = Double.NaN;
             betweenPlates = false;
+            airCurrentSpeed = Double.NaN;
+            airHeat = Double.NaN;
+            heat = Double.NaN;
+            area = Double.NaN;
+            maxHeat = Double.NaN;
+            heatAbsorption = Double.NaN;
+            newAirHeat = Double.NaN;
+            temperature = Double.NaN;
+
         }   
         public Vector vectorTo(Corner corner)
         {
@@ -150,10 +177,13 @@ namespace PlanetGenerator.SphereBuilder
         public Border[] borders;
         public Tile[] tiles;
         public Vector normal;
-        public double maxDistanceToCorner;
         public Color color;
         public Plate plate;
+        public double area;
         public double elevation;
+        public double temperature;
+        public double moisture;
+        public string biome;
         public Tile(int id, Vector position, int cornerCount, int borderCount, int tileCount)
         {
             this.id = id;
@@ -164,9 +194,9 @@ namespace PlanetGenerator.SphereBuilder
             tiles = new Tile[tileCount];
             normal = null;
             D = 0;
-            maxDistanceToCorner = 0;
             color = Color.Black;
             plate = null;
+            temperature = Double.NaN;
         }
 
         public void sortCorners()

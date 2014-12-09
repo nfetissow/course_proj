@@ -243,12 +243,11 @@ namespace STLParserProject
 
         public static Figure fromTriangleMesh(TriangleMesh mesh)
         {
+            //Distortion.distortMesh(mesh, 10, rng);
             Random rng = new Random();
-            Distortion.distortMesh(mesh, 10, rng);
-
             var triangles = new Triangle[mesh.faces.Length];
             var points = new Point3D[mesh.nodes.Length];
-            double mult = 150;
+            double mult = 200;
             double offset = 0;
             for (int i = 0; i < mesh.nodes.Length; ++i)
             {
@@ -267,12 +266,12 @@ namespace STLParserProject
         
 
 
-        public static Figure fromPolyhedronMesh(PolyhedronMesh mesh, double x1, double y1, double z1, Polyhedron.determineColor color)
+        public static Figure fromPolyhedronMesh(PolyhedronMesh mesh, Polyhedron.determineColor color)
         {
             Random rng = new Random();
             var points = new Point3D[mesh.corners.Length];
             var triangles = new List<Triangle>();
-            double mult = 200;
+            double mult = 0.35;
             double offset = 0;
             for (int i = 0; i < mesh.corners.Length; ++i)
             {
@@ -282,18 +281,18 @@ namespace STLParserProject
             foreach(Tile t in mesh.tiles)
             {
                 
-                int k = rng.Next(-4048, 1024);
+                int k = rng.Next(-20000000, 20000000);
                 t.sortCorners();
                 for(int i = t.corners.Length -2; i > 0; --i)
                 {
 
-                    triangles.Add(new Triangle(points, t.corners[t.corners.Length - 1].id, t.corners[i].id, t.corners[i - 1].id, color(t)));//t.plate.oceanic ? 0x1919CC : 0x9D5632));
+                    triangles.Add(new Triangle(points, t.corners[t.corners.Length - 1].id, t.corners[i].id, t.corners[i - 1].id, color(t)));//color(t)));//t.plate.oceanic ? 0x1919CC : 0x9D5632));
                 }
 
             }
 
             var figure = new Figure(triangles.ToArray(), points, points, null, null);
-            figure.transform(/*Matrix3D.getOffsetMatrix(-160, -160, 0) */ Matrix3D.getOffsetMatrix(x1, y1, z1));
+            figure.transform(/*Matrix3D.getOffsetMatrix(-160, -160, 0) */ Matrix3D.getOffsetMatrix(410, 840, 0));
             return figure;
         }
         

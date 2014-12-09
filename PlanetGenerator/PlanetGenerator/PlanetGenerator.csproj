@@ -94,6 +94,7 @@
     <Compile Include="PlanetGeneration\Planet.cs" />
     <Compile Include="PlanetGeneration\Elevation.cs" />
     <Compile Include="PlanetGeneration\Plates.cs" />
+    <Compile Include="PlanetGeneration\Weather.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SphereBuilder\Distortion.cs" />

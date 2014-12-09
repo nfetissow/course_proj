@@ -10,6 +10,42 @@ namespace PlanetGenerator.SphereBuilder
     {
         public delegate int determineColor(Tile tile);
 
+        private static Dictionary<string, int> biomes;
+
+        public static determineColor showBiomes = (Tile tile) =>
+        {
+            if(biomes == null)
+            {
+                biomes = new Dictionary<string, int>();
+                biomes.Add("ocean", 0x0000FB);
+                biomes.Add("deepOcean", 0x0000CD);
+                biomes.Add("veryDeepOcean", 0x0000AB);
+                biomes.Add("oceanGlacier", Color.White.ToArgb());
+                biomes.Add("desert", 0xE0E03E);
+                biomes.Add("rainForest", 0x0EA313);
+                biomes.Add("rocky", 0x705954);
+                biomes.Add("plains", 0x688B4D);
+                biomes.Add("swamp", 0x4D8B70);
+                biomes.Add("grassland", 0x099817);
+                biomes.Add("deciduousForest", 0x429809);
+                biomes.Add("tundra", 0x6F8E82);
+                biomes.Add("landGlacier", Color.White.ToArgb());
+                biomes.Add("coniferForest", 0x15A924);
+                biomes.Add("mountain", 0x545F5B);
+                biomes.Add("snowyMountain", Color.White.ToArgb());
+            }
+            if (biomes.ContainsKey(tile.biome))
+                return biomes[tile.biome];
+            else
+                return 0xFF0000;
+        };
+
+        public static determineColor random = (Tile tile) =>
+        {
+            Random rng = new Random();
+            return rng.Next(0, 0xFFFFFF);
+        };
+
         public static determineColor showElevation = (Tile tile) =>
         {
             if(tile.elevation < 0)
@@ -49,7 +85,7 @@ namespace PlanetGenerator.SphereBuilder
             for(int i = 0; i < icosahedron.faces.Length; ++i) 
             {
                 f = icosahedron.faces[i];
-                corners[i] = new Corner(i, centroid(f, icosahedron.nodes), f.e.Count, f.e.Count, f.n.Count);
+                corners[i] = new Corner(i, f.centroid * 1000, f.e.Count, f.e.Count, f.n.Count);
             }
 
             Edge e;
@@ -63,7 +99,7 @@ namespace PlanetGenerator.SphereBuilder
             for(int i = 0; i < icosahedron.nodes.Length; ++i)
             {
                 n = icosahedron.nodes[i];
-                tiles[i] = new Tile(i, new Vector(n.p), n.f.Count, n.e.Count, n.e.Count);
+                tiles[i] = new Tile(i, new Vector(n.p) * 1000, n.f.Count, n.e.Count, n.e.Count);
             }
 
             #region corners
@@ -140,14 +176,13 @@ namespace PlanetGenerator.SphereBuilder
                 }
                 tile.averagePos /= tile.corners.Length;
 
-                tile.sortCorners();
+                //tile.sortCorners();
                 
 			    for (var j = 0; j < node.e.Count; ++j)
 			    {
 				    var border = borders[node.e[j]];
 				    if (border.tiles[0].Equals(tile))
 				    {
-                        bool found = false;
 					    for (var k = 0; k < tile.corners.Length; ++k)
 					    {
 						    var corner0 = tile.corners[k];
@@ -163,133 +198,66 @@ namespace PlanetGenerator.SphereBuilder
 						    }
 						    tile.borders[k] = border;
 						    tile.tiles[k] = border.oppositeTile(tile);
-                            found = true;
 						    break;
 					    }
-                        if (!found)
-                        {
-                            int a = 9;
-                        }
 				    }
 				    else
 				    {
-                        bool found = false;
-                        //for (var k = 0; k < tile.corners.Length; ++k)
-                        //{
-                        //    var corner0 = tile.corners[k];
-                        //    var corner1 = tile.corners[(k + 1) % tile.corners.Length];
-                        //    if (border.corners[0].Equals(corner0) && border.corners[1].Equals(corner1))
-                        //    {
-                        //        border.corners[1] = corner0;
-                        //        border.corners[0] = corner1;
-                        //    }
-                        //    else if (!border.corners[1].Equals(corner0) || !border.corners[0].Equals(corner1.id))
-                        //    {
-                        //        continue;
-                        //    }
-                        //    tile.borders[k] = border;
-                        //    tile.tiles[k] = border.oppositeTile(tile);
-                        //    found = true;
-                        //    break;
-                        //}
                         for (var k = 0; k < tile.corners.Length; ++k)
                         {
                             var corner0 = tile.corners[k];
                             var corner1 = tile.corners[(k + 1) % tile.corners.Length];
-                            if (border.corners[1].Equals(corner0) && border.corners[0].Equals(corner1))
+                            if (border.corners[0].Equals(corner0) && border.corners[1].Equals(corner1))
                             {
                                 border.corners[0] = corner0;
                                 border.corners[1] = corner1;
                             }
-                            else if (!border.corners[0].Equals(corner0) || !border.corners[1].Equals(corner1))
+                            else if (!border.corners[1].Equals(corner0) || !border.corners[0].Equals(corner1))
                             {
                                 continue;
                             }
                             tile.borders[k] = border;
                             tile.tiles[k] = border.oppositeTile(tile);
-                            found = true;
                             break;
                         }
-                        if (!found)
-                        {
-                            int a = 9;
-                        }
-
 				    }
 			    }
-                
-			    
-			
-			    double maxDistanceToCorner = 0;
-			    for (var j = 0; j < tile.corners.Length; ++j)
-			    {
-				    maxDistanceToCorner = Math.Max(maxDistanceToCorner, 
-                        (tile.corners[j].pos - tile.averagePos).Magnitude());
-                        
-			    }
-                tile.maxDistanceToCorner = maxDistanceToCorner;
+
+
+
+                double area = 0;
+                for (int j = 0; j < tile.borders.Length; ++j)
+                {
+                    area += calculateTriangleArea(tile.pos, tile.borders[j].corners[0].pos, tile.borders[j].corners[1].pos);
+                }
+                tile.area = area;
                 tile.normal = tile.pos.Normalize();
-               // tile.color = new RayTracer.Color(rng.NextDouble(), rng.NextDouble(), rng.NextDouble());
                 tile.D = -tile.pos.Dot(tile.normal);
-                tiles[i] = tile;
             }
             #endregion
+
+            foreach(Corner corner in corners)
+            {
+                corner.area = 0;
+                foreach(Tile t in corner.tiles)
+                {
+                    corner.area += t.area / t.corners.Length;
+                }
+            }
 
             var mesh =  new PolyhedronMesh(tiles, borders, corners);
             return mesh;//verifyIntegrity(mesh);
         }
 
-        public static PolyhedronMesh verifyIntegrity(PolyhedronMesh mesh)
+        private static double calculateTriangleArea(Vector p1, Vector p2, Vector p3)
         {
-            //foreach(Tile t in mesh.tiles)
-            //{
-            //    int adjTileIndex = 0;
-            //    foreach(Border b in t.borders)
-            //    {
-            //        foreach(Tile conT in mesh.tiles)
-            //        {
-            //            if(!conT.Equals(t))
-            //            {
-            //                foreach(Border conB in conT.borders)
-            //                {
-            //                    if(conB.Equals(b))
-            //                    {
-            //                        //t.tiles[adjTileIndex++] = conT;
-            //                        adjTileIndex++;
-            //                        break;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //    if(adjTileIndex < t.borders.Length)
-            //    {
-            //        throw new FormatException("Not enough adjacent tiles for selected tile!");
-            //    }
-
-            //}
-            int[] tilesIndexes = new int[mesh.tiles.Length];
-            foreach(Border b in mesh.borders)
-            {
-                b.tiles[0].tiles[tilesIndexes[b.tiles[0].id]++] = b.tiles[1];
-                b.tiles[1].tiles[tilesIndexes[b.tiles[1].id]++] = b.tiles[0];
-            }
-            return mesh;
+            double A = (p1 - p2).Magnitude();
+            double B = (p2 - p3).Magnitude();
+            double C = (p3 - p1).Magnitude();
+            double p = (A + B + C) / 2;
+            return Math.Sqrt(p * (p - A) * (p - B) * (p - C));
         }
-
-
-        static Vector centroid(Face f, Node[] nodes)
-        {
-            return calculateFaceCentroid(nodes[f.n[0]].p, nodes[f.n[1]].p, nodes[f.n[2]].p);
-        }
-
-        public static Vector calculateFaceCentroid(Vector pa, Vector pb, Vector pc)
-        {
-            var vabHalf = (pb - pa) / 2;
-            var pabHalf = pa + vabHalf;
-            var centroid = (pc - pabHalf) / 3 + pabHalf;
-            return centroid;
-        }
+        
     }
 
     public class PolyhedronMesh:  IDrawable
