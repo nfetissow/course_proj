@@ -26,7 +26,7 @@ namespace PlanetGenerator.PlanetGeneration
                 var tile = tiles[i];
                 var elevation = tile.elevation;
                 //var latitude = Math.Abs(tile.pos.y / planetRadius);
-                var temperature = tile.temperature - 0.5;
+                var temperature = tile.temperature - 0.3;
 
                 var moisture = tile.moisture;
 
@@ -90,7 +90,7 @@ namespace PlanetGenerator.PlanetGeneration
                     {
                         if (moisture < 0.25)
                         {
-                            tile.biome = "tundra";
+                            tile.biome = "landGlacier";
                         }
                         else
                         {

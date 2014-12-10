@@ -80,9 +80,9 @@
             // 
             // pbScene
             // 
-            this.pbScene.Location = new System.Drawing.Point(0, 53);
+            this.pbScene.Location = new System.Drawing.Point(0, -2);
             this.pbScene.Name = "pbScene";
-            this.pbScene.Size = new System.Drawing.Size(1273, 785);
+            this.pbScene.Size = new System.Drawing.Size(1217, 785);
             this.pbScene.TabIndex = 0;
             this.pbScene.TabStop = false;
             this.pbScene.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbScene_MouseDown);
@@ -108,6 +108,7 @@
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "label2";
+            this.label2.Visible = false;
             // 
             // tbUI
             // 
@@ -121,7 +122,7 @@
             // 
             // tbSettings
             // 
-            this.tbSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
+            this.tbSettings.BackColor = System.Drawing.Color.Black;
             this.tbSettings.Controls.Add(this.panelDetalisation);
             this.tbSettings.Controls.Add(this.panelSurface);
             this.tbSettings.Controls.Add(this.btGenerate);
@@ -270,7 +271,7 @@
             // 
             // tbAdvanced
             // 
-            this.tbAdvanced.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
+            this.tbAdvanced.BackColor = System.Drawing.Color.MidnightBlue;
             this.tbAdvanced.Controls.Add(this.lbHeatLevel);
             this.tbAdvanced.Controls.Add(this.lbMoistureLevel);
             this.tbAdvanced.Controls.Add(this.lbTectonicPlateCount);
@@ -429,8 +430,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(1488, 893);
+            this.BackColor = System.Drawing.Color.Black;
+            this.ClientSize = new System.Drawing.Size(1370, 750);
             this.Controls.Add(this.tbUI);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);

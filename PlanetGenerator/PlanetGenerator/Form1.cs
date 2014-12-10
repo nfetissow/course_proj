@@ -31,7 +31,7 @@ namespace PlanetGenerator
             InitializeComponent();
 
             setSettings();
-            //generatePlanet();
+            generatePlanet();
             UIData.ThreadCounts = 4;
 
 
@@ -166,6 +166,8 @@ namespace PlanetGenerator
             this.tbDistorionLevel.Value = 90;
             this.tbTectonicPlateCount.Value = 50;
             UIData.tectonicPlateCount = 50;
+            UIData.oceanicRate = 0.7;
+            this.tbOceanicRate.Value = 70;
         }
 
         private void generatePlanet()

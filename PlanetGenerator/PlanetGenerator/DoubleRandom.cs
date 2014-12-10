@@ -27,7 +27,8 @@ namespace PlanetGenerator
         {
             if(succesiveFailures > 1000)
             {
-                throw new ArgumentException("No values left");
+                //throw new ArgumentException("No values left");
+                return Next(minValue, maxValue);
             }
             int q = this.Next(minValue, maxValue);
             if (!selectedValues.Contains(q))

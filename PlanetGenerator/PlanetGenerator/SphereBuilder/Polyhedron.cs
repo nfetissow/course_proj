@@ -24,7 +24,7 @@ namespace PlanetGenerator.SphereBuilder
                 biomes.Add("desert", 0xE0E03E);
                 biomes.Add("rainForest", 0x0EA313);
                 biomes.Add("rocky", 0x705954);
-                biomes.Add("plains", 0x688B4D);
+                biomes.Add("plains", 0x054A02);
                 biomes.Add("swamp", 0x4D8B70);
                 biomes.Add("grassland", 0x099817);
                 biomes.Add("deciduousForest", 0x429809);
