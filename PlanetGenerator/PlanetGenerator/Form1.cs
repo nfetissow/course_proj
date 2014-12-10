@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using PlanetGenerator.Painter;
 using PlanetGenerator.SphereBuilder;
 using STLParserProject;
+using System.Threading;
+
 namespace PlanetGenerator
 {
     public partial class Form1 : Form
@@ -31,9 +33,7 @@ namespace PlanetGenerator
             InitializeComponent();
 
             setSettings();
-            generatePlanet();
             UIData.ThreadCounts = 4;
-
 
         }
 
@@ -136,24 +136,6 @@ namespace PlanetGenerator
         }
 
 
-
-        //private void viewType_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    requests = new ConcurrentQueue<Request>();
-        //    canvas = new Canvas(this.pbScene);
-        //    //facade = new Facade(canvas, requests, label1, Figure.fromPolyhedronMesh(mesh, (double)this.numericUpDown4.Value, (double)this.numericUpDown5.Value, (double)this.numericUpDown6.Value));
-        //    Polyhedron.determineColor set = Polyhedron.showPlates;
-        //    switch (this.viewType.SelectedIndex)
-        //    {
-        //        case 0: set = Polyhedron.showElevation; break;
-        //        case 1: set = Polyhedron.showPlates; break;
-        //        case 2: set = Polyhedron.showBiomes; break;
-        //    }
-        //    facade = new Facade(canvas, requests, label1, Figure.fromPolyhedronMesh(planet, (double)this.numericUpDown4.Value, (double)this.numericUpDown5.Value, (double)this.numericUpDown6.Value, set));
-        //    facade.canTransform = true;
-        //    requests.Enqueue(new ScaleRequest(-1, SCALE_SIGN.MINUS, 0));
-        //}
-
         private void setSettings()
         {
             this.rbHigh.Checked = true;
@@ -169,7 +151,15 @@ namespace PlanetGenerator
             UIData.oceanicRate = 0.7;
             this.tbOceanicRate.Value = 70;
         }
-
+        interface IFormState
+        {
+            int progress { get; set; }
+        }
+        public int progressInBar
+        {
+            get { return this.pbLoading.Value; }
+            set { this.pbLoading.Value = value; }
+        }
         private void generatePlanet()
         {
             this.UseWaitCursor = true;
@@ -179,21 +169,38 @@ namespace PlanetGenerator
             {
                 rng = new DoubleRandom();
                 int k = rng.Next();
-                this.tbSeed.Text = k.ToString();
+                this.BeginInvoke(new Action(() => { this.tbUsedSeed.Text = k.ToString(); }));
                 rng = new DoubleRandom(k);
             }
             else
             {
-                rng = new DoubleRandom(Int32.Parse(this.tbSeed.Text));
+                int seed;
+                bool success = Int32.TryParse(this.tbSeed.Text, out seed);
+                if(success)
+                {
+                    rng = new DoubleRandom(seed);
+                    this.BeginInvoke(new Action(() => { this.tbUsedSeed.Text = seed.ToString(); }));
+
+                }
+                else
+                {
+                    this.BeginInvoke(new Action(() => { this.tbSeed.Text = ""; }));
+                    
+                    rng = new DoubleRandom();
+                    int k = rng.Next();
+                    rng = new DoubleRandom(k);
+                    this.BeginInvoke(new Action(() => { this.tbUsedSeed.Text = k.ToString(); }));
+
+                }
             }
             TriangleMesh mesh = Icosahedron.generateSubdividedIcosahedron(UIData.tesselationLevel);
-            this.pbLoading.Value = 10;
+            this.BeginInvoke(new Action(() => { this.pbLoading.Value = 10; }));
             Distortion.distortAndRelaxMesh(mesh, UIData.distortionLevel, rng);
-            this.pbLoading.Value = 20;
+            this.BeginInvoke(new Action(() => { this.pbLoading.Value = 20; }));
             PolyhedronMesh topology = Polyhedron.getDualPolyhedron(mesh);
-            this.pbLoading.Value = 30;
+            this.BeginInvoke(new Action(() => { this.pbLoading.Value = 30; }));
             planet = PlanetGeneration.Planet.createPlanet(topology, UIData.tectonicPlateCount, UIData.oceanicRate, UIData.heatLevel, UIData.moistureLevel, 1000, rng);
-            this.pbLoading.Value = 70;
+            this.BeginInvoke(new Action(() => { this.pbLoading.Value = 70; }));
             requests = new ConcurrentQueue<Request>();
             canvas = new Canvas(this.pbScene);
 
@@ -212,14 +219,19 @@ namespace PlanetGenerator
             }
 
             facade = new Facade(canvas, requests, label1, Figure.fromPolyhedronMesh(planet, set));
-            this.pbLoading.Value = 90;
+            this.BeginInvoke(new Action(() => { this.pbLoading.Value = 90; }));
+                       
             facade.canTransform = true;
             requests.Enqueue(new ScaleRequest(-1, SCALE_SIGN.MINUS, 0));
-            this.pbLoading.Value = 100;
+            this.BeginInvoke(new Action(() => { this.pbLoading.Value = 100; }));
 
 
             this.UseWaitCursor = false;
+            this.BeginInvoke(new Action(()=> {btGenerate.Enabled = true;}));
         }
+  
+        
+
 
         #region UI events
         private void tbDetailLevel_ValueChanged(object sender, EventArgs e)
@@ -312,7 +324,13 @@ namespace PlanetGenerator
 
         private void btGenerate_Click(object sender, EventArgs e)
         {
-            generatePlanet();
+            this.btGenerate.Enabled = false;
+            new Thread(() => { generatePlanet(); }).Start();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            generatePlanet();
+        }   
     }
 }

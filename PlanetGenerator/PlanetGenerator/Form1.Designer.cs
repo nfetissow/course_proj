@@ -63,6 +63,8 @@
             this.tbDistorionLevel = new System.Windows.Forms.TrackBar();
             this.tbDetailLevel = new System.Windows.Forms.TrackBar();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.tbUsedSeed = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbScene)).BeginInit();
             this.tbUI.SuspendLayout();
             this.tbSettings.SuspendLayout();
@@ -123,6 +125,8 @@
             // tbSettings
             // 
             this.tbSettings.BackColor = System.Drawing.Color.Black;
+            this.tbSettings.Controls.Add(this.label3);
+            this.tbSettings.Controls.Add(this.tbUsedSeed);
             this.tbSettings.Controls.Add(this.panelDetalisation);
             this.tbSettings.Controls.Add(this.panelSurface);
             this.tbSettings.Controls.Add(this.btGenerate);
@@ -271,7 +275,7 @@
             // 
             // tbAdvanced
             // 
-            this.tbAdvanced.BackColor = System.Drawing.Color.MidnightBlue;
+            this.tbAdvanced.BackColor = System.Drawing.Color.Black;
             this.tbAdvanced.Controls.Add(this.lbHeatLevel);
             this.tbAdvanced.Controls.Add(this.lbMoistureLevel);
             this.tbAdvanced.Controls.Add(this.lbTectonicPlateCount);
@@ -426,6 +430,23 @@
             this.tbDetailLevel.Value = 50;
             this.tbDetailLevel.ValueChanged += new System.EventHandler(this.tbDetailLevel_ValueChanged);
             // 
+            // tbUsedSeed
+            // 
+            this.tbUsedSeed.Location = new System.Drawing.Point(233, 241);
+            this.tbUsedSeed.Name = "tbUsedSeed";
+            this.tbUsedSeed.ReadOnly = true;
+            this.tbUsedSeed.Size = new System.Drawing.Size(177, 20);
+            this.tbUsedSeed.TabIndex = 10;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(230, 220);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(183, 13);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "Используемый источник энтропии";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -439,9 +460,11 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Генератор планет";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbScene)).EndInit();
             this.tbUI.ResumeLayout(false);
             this.tbSettings.ResumeLayout(false);
+            this.tbSettings.PerformLayout();
             this.panelDetalisation.ResumeLayout(false);
             this.panelDetalisation.PerformLayout();
             this.panelSurface.ResumeLayout(false);
@@ -495,6 +518,8 @@
         private System.Windows.Forms.Label lbDetailLevel;
         private System.Windows.Forms.Panel panelDetalisation;
         private System.Windows.Forms.Panel panelSurface;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbUsedSeed;
     }
 }
 
