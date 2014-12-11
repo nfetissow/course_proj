@@ -244,12 +244,6 @@ namespace PlanetGenerator.PlanetGeneration
 		        var elevationEffect = 1 - Math.Pow(Math.Max(0, Math.Min(corner.elevation * 0.8, 1)), 2);
 		        var normalizedHeat = corner.heat / corner.area;
 		        corner.temperature = (latitudeEffect * elevationEffect * 0.7 + normalizedHeat * 0.3) * 5/3 - 2/3;
-                //delete corner.airHeat;
-                //delete corner.newAirHeat;
-                //delete corner.heat;
-                //delete corner.maxHeat;
-                //delete corner.heatAbsorption;
-                //MIND MEMORY USING, A LOT OF ROOM FOR OPTIMISATION
 	        }
 
 	        for (var i = 0; i < tiles.Length; ++i)
@@ -309,16 +303,9 @@ namespace PlanetGenerator.PlanetGeneration
 	        {
 		        var corner = activeCorners[i];
 		        if (corner.airMoisture == 0) continue;
-		        if(Double.IsNaN(corner.precipitation))
-                {
-                    int b = 1;
-                }
 		        var moistureChange = Math.Max(0, Math.Min(corner.airMoisture, corner.precipitationRate * (1 - corner.precipitation / corner.maxPrecipitation)));
 		        corner.precipitation += moistureChange;
                 if (Double.IsNaN(corner.precipitation))
-                {
-                    int b = 1;
-                }
 		        consumedMoisture += moistureChange;
 		        var moistureLoss = corner.area * (corner.precipitation / corner.maxPrecipitation) * 0.02;
 		        moistureChange = Math.Min(corner.airMoisture, moistureChange + moistureLoss);

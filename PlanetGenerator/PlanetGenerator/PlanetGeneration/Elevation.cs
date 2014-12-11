@@ -347,8 +347,6 @@ namespace PlanetGenerator.PlanetGeneration
 			        var plate1 = corner.tiles[1].plate;
 			        var plate2 = corner.tiles[2].plate;
 			
-			        //double elevation = 0; WHY IS THIS HERE?
-
 			        if (corner.pressure > 0.3)
 			        {
 				        corner.elevation = Max(plate0.elevation, plate1.elevation, plate2.elevation) + corner.pressure;
@@ -367,9 +365,6 @@ namespace PlanetGenerator.PlanetGeneration
 			        }
 		        }
 	        }
-            double q = Max(1, 3, 5);
-            q = Max(1, 5, 3);
-            q = Max(5, 1, 3);
                 
             return elevationBorderQueue;
         }
@@ -422,7 +417,6 @@ namespace PlanetGenerator.PlanetGeneration
                 }
 
                     elevationBorderQueue.RemoveRange(0, iEnd);
-                //elevationBorderQueue.splice(0, iEnd);
                 elevationBorderQueue.Sort();
             }
         }
@@ -434,7 +428,7 @@ namespace PlanetGenerator.PlanetGeneration
                 double elevation = 0;
                 for(int i = 0; i < tile.corners.Length; ++i)
                 {
-                    elevation += tile.corners[i].elevation;//Double.IsNaN(tile.corners[i].elevation) ? -0.1 : tile.corners[i].elevation;
+                    elevation += tile.corners[i].elevation;
                 }
                 tile.elevation = elevation / tile.corners.Length;
             }

@@ -60,7 +60,7 @@ namespace Painter
             {
                 if (requests.TryDequeue(out request) == true && canTransform == true)
                 {
-                    double frameFPS = 1000 / tranformAll(request);
+                    double frameFPS = tranformAll(request);
                     calculateFrameRate(true);
                 }
                 else

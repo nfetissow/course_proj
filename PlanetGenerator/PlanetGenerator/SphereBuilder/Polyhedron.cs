@@ -24,7 +24,7 @@ namespace PlanetGenerator.SphereBuilder
                 biomes.Add("desert", 0xE0E03E);
                 biomes.Add("rainForest", 0x0EA313);
                 biomes.Add("rocky", 0x705954);
-                biomes.Add("plains", 0x054A02);
+                biomes.Add("plains", 0x66B564);//0x054A02);
                 biomes.Add("swamp", 0x466E45);
                 biomes.Add("grassland", 0x099817);
                 biomes.Add("deciduousForest", 0x429809);
@@ -33,7 +33,7 @@ namespace PlanetGenerator.SphereBuilder
                 biomes.Add("coniferForest", 0x15A924);
                 biomes.Add("mountain", 0x545F5B);
                 biomes.Add("snowyMountain", Color.White.ToArgb());
-                biomes.Add("land", 0x66B564);
+                biomes.Add("land", 0x054A02);//0x66B564);
             }
             if (biomes.ContainsKey(tile.biome))
                 return biomes[tile.biome];
