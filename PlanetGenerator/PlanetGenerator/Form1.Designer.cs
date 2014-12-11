@@ -35,6 +35,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tbUI = new System.Windows.Forms.TabControl();
             this.tbSettings = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbUsedSeed = new System.Windows.Forms.TextBox();
             this.panelDetalisation = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.rbHigh = new System.Windows.Forms.RadioButton();
@@ -63,8 +65,8 @@
             this.tbDistorionLevel = new System.Windows.Forms.TrackBar();
             this.tbDetailLevel = new System.Windows.Forms.TrackBar();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.tbUsedSeed = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.btHelp = new System.Windows.Forms.Button();
+            this.tbLegend = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbScene)).BeginInit();
             this.tbUI.SuspendLayout();
             this.tbSettings.SuspendLayout();
@@ -116,7 +118,7 @@
             // 
             this.tbUI.Controls.Add(this.tbSettings);
             this.tbUI.Controls.Add(this.tbAdvanced);
-            this.tbUI.Location = new System.Drawing.Point(849, 74);
+            this.tbUI.Location = new System.Drawing.Point(854, 18);
             this.tbUI.Name = "tbUI";
             this.tbUI.SelectedIndex = 0;
             this.tbUI.Size = new System.Drawing.Size(424, 365);
@@ -138,6 +140,23 @@
             this.tbSettings.Size = new System.Drawing.Size(416, 339);
             this.tbSettings.TabIndex = 0;
             this.tbSettings.Text = "Настройки";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(230, 220);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(183, 13);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "Используемый источник энтропии";
+            // 
+            // tbUsedSeed
+            // 
+            this.tbUsedSeed.Location = new System.Drawing.Point(233, 241);
+            this.tbUsedSeed.Name = "tbUsedSeed";
+            this.tbUsedSeed.ReadOnly = true;
+            this.tbUsedSeed.Size = new System.Drawing.Size(177, 20);
+            this.tbUsedSeed.TabIndex = 10;
             // 
             // panelDetalisation
             // 
@@ -430,29 +449,39 @@
             this.tbDetailLevel.Value = 50;
             this.tbDetailLevel.ValueChanged += new System.EventHandler(this.tbDetailLevel_ValueChanged);
             // 
-            // tbUsedSeed
+            // btHelp
             // 
-            this.tbUsedSeed.Location = new System.Drawing.Point(233, 241);
-            this.tbUsedSeed.Name = "tbUsedSeed";
-            this.tbUsedSeed.ReadOnly = true;
-            this.tbUsedSeed.Size = new System.Drawing.Size(177, 20);
-            this.tbUsedSeed.TabIndex = 10;
+            this.btHelp.BackColor = System.Drawing.Color.Black;
+            this.btHelp.ForeColor = System.Drawing.Color.White;
+            this.btHelp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btHelp.Location = new System.Drawing.Point(1172, 400);
+            this.btHelp.Name = "btHelp";
+            this.btHelp.Size = new System.Drawing.Size(99, 23);
+            this.btHelp.TabIndex = 19;
+            this.btHelp.Text = "Справка";
+            this.btHelp.UseVisualStyleBackColor = false;
+            this.btHelp.Click += new System.EventHandler(this.btHelp_Click);
             // 
-            // label3
+            // tbLegend
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(230, 220);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(183, 13);
-            this.label3.TabIndex = 11;
-            this.label3.Text = "Используемый источник энтропии";
+            this.tbLegend.BackColor = System.Drawing.Color.Black;
+            this.tbLegend.ForeColor = System.Drawing.Color.White;
+            this.tbLegend.Location = new System.Drawing.Point(854, 458);
+            this.tbLegend.Multiline = true;
+            this.tbLegend.Name = "tbLegend";
+            this.tbLegend.ReadOnly = true;
+            this.tbLegend.Size = new System.Drawing.Size(424, 130);
+            this.tbLegend.TabIndex = 20;
+            this.tbLegend.Text = "Условные обозначения";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1370, 750);
+            this.ClientSize = new System.Drawing.Size(1290, 750);
+            this.Controls.Add(this.tbLegend);
+            this.Controls.Add(this.btHelp);
             this.Controls.Add(this.tbUI);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -520,6 +549,8 @@
         private System.Windows.Forms.Panel panelSurface;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbUsedSeed;
+        private System.Windows.Forms.Button btHelp;
+        private System.Windows.Forms.TextBox tbLegend;
     }
 }
 
