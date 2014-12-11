@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace STLParserProject.CommandsCode
+namespace Painter.CommandsCode
 {
     class ProjectionCommand: Command
     {

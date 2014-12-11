@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace STLParserProject
+namespace Painter
 {
     public class Plane3D:Point3D
     {

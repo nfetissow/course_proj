@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace STLParserProject
+namespace Painter
 {
     public class Point3D : IEquatable<Point3D>
     {

@@ -1,5 +1,5 @@
 ﻿
-namespace STLParserProject
+namespace Painter
 {
     enum OFFSET_DIRECTION{LEFT, RIGHT, UP, DOWN}
     class OffsetRequest :Request

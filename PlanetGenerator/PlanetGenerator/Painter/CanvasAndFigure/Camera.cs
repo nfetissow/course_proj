@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace STLParserProject
+namespace Painter
 {
     public class Camera
     {
         protected Point3D center;
-        //private Point3D[] cameraRect;
         protected Point3D rotateCenter;
         protected Point3D turningPoint;
         protected double distance;
@@ -41,7 +40,6 @@ namespace STLParserProject
             matr.transformPoint(center);
             matr.transformPoint(rotateCenter);
             matr.transformPoint(turningPoint);
-            //this.vectorMultMark = Point3D.vectorMultiplicationMark(center - rotateCenter, Cartesian.k);
         }
 
         public void transformAroundCenter(Matrix3D matr)
@@ -51,7 +49,6 @@ namespace STLParserProject
             resMatr.transformPoint(center);
             resMatr.transformPoint(turningPoint);
             resMatr.transformPoint(rotateCenter);
-            // this.vectorMultMark = Point3D.vectorMultiplicationMark(center - rotateCenter, Cartesian.k);
         }
 
         public bool canTransform(Matrix3D matr)
@@ -99,14 +96,6 @@ namespace STLParserProject
             }
             if (request is ScaleRequest)
             {
-//                 Point3D vector = (center - rotateCenter) * (request as ScaleRequest).getKoef(),
-//                     arm = turningPoint - center;
-// 
-//                 center = rotateCenter + vector;
-//                 turningPoint = center + arm;
-//                 distance = vector.getLength();
-//                 projectionPlane = distance / 4;
-
                 projectionPlane *= (request as ScaleRequest).getKoef();
 
                 if (projectionPlane < 20 || projectionPlane > 200)
@@ -146,13 +135,7 @@ namespace STLParserProject
             return new Matrix3D();
         }
 
-
-        Matrix3D invertedMatrix;
-        /// <summary>
-        /// Производит операции по получению матрицы для преобразования фигуры(говоря проще - представления фигуры в координатах камеры)
-        /// ЛУЧШЕ СЮДА НЕ ЛЕЗТЬ! ВСЕ РАБОТАЕТ! другой вопрос как? я сам хз)) как-то шаманил в начале июня 14 года))
-        /// </summary>
-        /// <returns></returns>
+        
         public Matrix3D calculateFigureTransformatioMatrix()
         {
             Matrix3D resMatrix = new Matrix3D();
@@ -199,14 +182,6 @@ namespace STLParserProject
                 Matrix3D.getPreProjectionMatrix(120, 1, projectionPlane) *
              Matrix3D.getScaleMatrix(6, 6, 1);
 
-//                          
-//             secondMatrix =
-                //                          Matrix3D.getCentralProjectionMatrixV1(projectionPlane);
-//                         Matrix3D.getCentralProjectionMatrixV2(120, 1, projectionPlane, zf)*
-//                         Matrix3D.getCentralProjectionMatrixV3(120, 1, projectionPlane, zf)*
-//                         Matrix3D.getScaleMatrix(6, 6, 1) *
-//                         Matrix3D.getOffsetMatrix(rotateCenter.X, rotateCenter.Y, rotateCenter.Z);
-
             Camera bufCamera3 = new Camera(this);
             bufCamera3.transform(resMatrix);
 
@@ -220,22 +195,13 @@ namespace STLParserProject
 
             point.X = point.X / point.Z + rotateCenter.X;
             point.Y = point.Y / point.Z + rotateCenter.Y;
-// //             point.Z *= 100;
-        }
 
-        public virtual void reverseTrasnformPointAfterDrawing(Point3D point)
-        {
-//             point.Z /= 100;
-//             point.X = (point.X - rotateCenter.X) * point.Z;
-//             point.Y = (point.Y - rotateCenter.Y) * point.Z;
         }
 
         public double getZn() { return projectionPlane; }
         public double getZf() { return zf; }
         public double getDistance() { return distance; }
         public Matrix3D getFigureTransformationMatrix() { return figureTransformationMatrix; }
-
-        public Matrix3D getInvertedMatrix() { return invertedMatrix; }
     }
 }
 

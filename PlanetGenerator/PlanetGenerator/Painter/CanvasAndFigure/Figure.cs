@@ -11,7 +11,7 @@ using PlanetGenerator.SphereBuilder;
 
 using System.IO;
 
-namespace STLParserProject
+namespace Painter
 {
     class Figure
     {
@@ -19,7 +19,6 @@ namespace STLParserProject
         protected Point3D[] points;
         protected Point3D[] pointsCopy;
         protected Point3D[] pointNormals;
-        //protected Point3D[] uvpoints;
         protected double[] intensivities;
         protected Matrix3D prevMatrix;
         protected double xWidth, yWidth, zWidth;
@@ -29,24 +28,17 @@ namespace STLParserProject
         protected bool transformed = false;
         public Point3D middlePoint { get; set; }
 
-        //
-        private CylindricalTexture texture;
-        protected OpticalCharacteristics optics;
-        //public Material material;
-
-        public Figure(Triangle[] triangles, Point3D[] points, Point3D[] pointNormals, Point3D[] uvpoints, Material material)
+        public Figure(Triangle[] triangles, Point3D[] points, Point3D[] pointNormals)
         {
             this.triangles = triangles;
             this.points = points;
             this.pointNormals = pointNormals;
-            //this.uvpoints = uvpoints;
             prevMatrix = new Matrix3D();
 
             xWidth = points.Max(p => p.X) - points.Min(p => p.X);
             yWidth = points.Max(p => p.Y) - points.Min(p => p.Y);
             zWidth = points.Max(p => p.Z) - points.Min(p => p.Z);
 
-            this.optics = optics;
             intensivities = new double[points.Length];
             pointsCopy = new Point3D[points.Length];
             middlePoint= new Point3D(0, 0, 0);
@@ -57,17 +49,8 @@ namespace STLParserProject
                 middlePoint += points[i];
             }
             middlePoint /= points.Length;
-            //middlePoint = new Point3D(points.Min(p => p.X), points.Min(p => p.Y),0);
-//             Image img = Image.FromFile("C:\\Users\\Али\\Documents\\Visual Studio 2010\\Projects\\STLParserProject Финальная\\Textures\\e1.jpg");
-//             
-            //             TriplanarTexture texture = new TriplanarTexture(img, this);
-            //this.material = material;
-            //texture = new CylindricalTexture(material.Texture);
-            optics = new OpticalCharacteristics(0.1, 0.9, 0.5, 40);
             for (int i = 0; i < triangles.Length; i++)
             {
-                triangles[i].setUVVerts(uvpoints);
-                triangles[i].setTexture(texture);
                 triangles[i].setIntensivities(intensivities);
                 triangles[i].setNormals(pointNormals);
                 triangles[i].setRealVerts(pointsCopy);
@@ -88,23 +71,8 @@ namespace STLParserProject
             }
         }
 
-        public void finalize() { texture.finalize(); }
-        /// <summary>
-        /// This function does nothing
-        /// </summary>
-        /// <param name="m"></param>
-        public void setMaterial(Material m)
-        {
-            //material = m;
-            //texture = new CylindricalTexture(material.Texture);
-            //optics = material.Optics;
-            //for (int i = 0; i < triangles.Length; i++)
-            //    triangles[i].setTexture(texture);
-        }
-
         public Triangle[] getTriangles() { return triangles; }
 
-        public OpticalCharacteristics getOptics() { return optics; }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         private bool[] getVisibleArray(Point3D watchVector)
@@ -114,13 +82,6 @@ namespace STLParserProject
                 res[i] = true;
             return res;
         }
-        // 
-        //         public void draw(Graphics g, int height)
-        //         {
-        //             for (int i = 0; i < triangles.Length; i++)
-        //                 if (visibleTriangles[i] != TRIANGLE_VISIBILITY.NO)
-        //                     triangles[i].draw(g, height);
-        //         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void transform(Matrix3D matr)
@@ -140,7 +101,6 @@ namespace STLParserProject
             List<Lightning> lightningList = data.lightnings;
             motions.TryDequeue(out figureMatr);
 
-            double zBuf;
             double ymax = -10000; double ymin = 10000;
             if (figureMatr != null)
                 figureMatr.transformPoint(middlePoint);
@@ -158,28 +118,7 @@ namespace STLParserProject
                 if (ymin > points[i].Y)
                     ymin = points[i].Y;
                 
-
-                // вычисление интенсивности света в каждой вершине
-                Point3D normal = new Point3D(pointNormals[i]);
-                intensivities[i] = optics.getKa();
-                Point3D V = camera.getCenterPoint() - pointsCopy[i];
-                for (int j = 0; j < lightningList.Count; j++)
-                {
-                    Point3D L = lightningList[j].getL(pointsCopy[i]);
-                    double cosTeta = (normal * L) / (normal.getLength() * L.getLength());
-                    L *= -1;
-                    Point3D R = L - normal * 2 * (normal * L);
-                    intensivities[i] += lightningList[j].Amp
-                         * (optics.getKd() * cosTeta + optics.getKs() * Math.Pow(R*V/R.getLength()/V.getLength(), optics.getNs()));
-                }
-                if (intensivities[i] > 1)
-                    intensivities[i] = 1;
-                if (intensivities[i] < 0)
-                    intensivities[i] = 0;
             };
-            // вот тут внимательно слушаем:
-            // алгоритм отбрасывания нелицевых граней создан из 2-х: первый этап Робертса как преобработка и z буфер 
-            // на этом этапе определяется видимость грани относительно камеры(тот самый первый этап)
             visibleTriangles = new TRIANGLE_VISIBILITY[triangles.Length];
             for (int i = 0; i < triangles.Length; i++)
             {
@@ -209,9 +148,6 @@ namespace STLParserProject
             }
         }
 
-
-        // 
-        //         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public virtual unsafe void updateOnlyZBufferFrame(int y1, int y2)
         {
             for (int i = 0; i < triangles.Length; i++)
@@ -243,7 +179,7 @@ namespace STLParserProject
 
         public static Figure fromTriangleMesh(TriangleMesh mesh)
         {
-            //Distortion.distortMesh(mesh, 10, rng);
+            
             Random rng = new Random();
             var triangles = new Triangle[mesh.faces.Length];
             var points = new Point3D[mesh.nodes.Length];
@@ -258,7 +194,7 @@ namespace STLParserProject
                 triangles[i] = new Triangle(points, mesh.faces[i].n[0], mesh.faces[i].n[1], mesh.faces[i].n[2], rng.Next(Int32.MinValue, Int32.MaxValue));
             }
 
-            var figure = new Figure(triangles, points, points, null, null);
+            var figure = new Figure(triangles, points, points);//, null);
             figure.transform(Matrix3D.getOffsetMatrix(410, 840, 0));
             return figure;
         }
@@ -286,13 +222,13 @@ namespace STLParserProject
                 for(int i = t.corners.Length -2; i > 0; --i)
                 {
 
-                    triangles.Add(new Triangle(points, t.corners[t.corners.Length - 1].id, t.corners[i].id, t.corners[i - 1].id, color(t)));//color(t)));//t.plate.oceanic ? 0x1919CC : 0x9D5632));
+                    triangles.Add(new Triangle(points, t.corners[t.corners.Length - 1].id, t.corners[i].id, t.corners[i - 1].id, color(t)));
                 }
 
             }
 
-            var figure = new Figure(triangles.ToArray(), points, points, null, null);
-            figure.transform(/*Matrix3D.getOffsetMatrix(-160, -160, 0) */ Matrix3D.getOffsetMatrix(410, 840, 0));
+            var figure = new Figure(triangles.ToArray(), points, points);
+            figure.transform(Matrix3D.getOffsetMatrix(410, 840, 0));
             return figure;
         }
         

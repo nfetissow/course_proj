@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace STLParserProject
+namespace Painter
 {
     class Shadow
     {
@@ -40,7 +40,6 @@ namespace STLParserProject
 
             ConcurrentQueue<double> ymins = new ConcurrentQueue<double>();
             ConcurrentQueue<double> ymaxs = new ConcurrentQueue<double>();
-//             Parallel.For(0, figureList.Count, i => figureList[i].transformForShadow(data, ymaxs, ymins));
 
             for (int i = 0; i < figureList.Count; i++)
             {
@@ -70,21 +69,10 @@ namespace STLParserProject
         {
 
             Point3D bufP = new Point3D(point);
-            //             shadowMatr.transformPoint(bufP);   
-            // //             shadowMatr.transformPoint(bufP);
-            // //             light.trasnformPointAfterProjection(bufP);
-            // 
             bufP = bufP.toInt();
             if (bufP.X < 0 || bufP.X >= width || bufP.Y < 0 || bufP.Y >= height)
                 return true;
             bool res = shadowMap[(int)(bufP.X) + width * (height - (int)(bufP.Y) - 1)] + Triangle.Eps2 < bufP.Z;
-            //             if (res == true)
-            //             {
-            //                 Trace.WriteLine(shadowMap[Triangle.round(bufP.X) + width * (height - Triangle.round(bufP.Y) - 1)] + " " + bufP.ToString());
-            //             }
-            //             
-//             if (res == true)
-//                 Debugger.Break();
             return res;
         }
 

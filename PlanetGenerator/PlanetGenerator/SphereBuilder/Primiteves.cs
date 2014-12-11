@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using PlanetGenerator.PlanetGeneration;
-using STLParserProject;
+using Painter;
 
 namespace PlanetGenerator.SphereBuilder
 {

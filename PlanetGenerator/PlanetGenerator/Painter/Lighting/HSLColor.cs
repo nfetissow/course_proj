@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace STLParserProject
+namespace Painter
 {
     public class HSLColor
     {
@@ -20,40 +20,6 @@ namespace STLParserProject
             int B = (color & 0x000000FF);
             int Cmax = max(R, G, B), Cmin = min(R, G, B);
             int delta = Cmax - Cmin;
-
-            #region из rgb в hsl (TODO)
-            //             if (R < G)
-            //             {
-            //                 if (G < B)
-            //                 {
-            //                     Cmax = B;
-            //                     Cmin = R;
-            //                 }
-            //                 else
-            //                     if (R < B)
-            //                     {
-            //                         Cmin = R;
-            //                         Cmax = G;
-            //                     }
-            //                     else
-            //                     {
-            // 
-            //                     }
-            // 
-            //             }
-            //             else
-            //             {
-            //                 if (G > B)
-            //                 {
-            // 
-            //                 }
-            //                 else
-            //                     if (R < B)
-            //                     {
-            // 
-            //                     }
-            //             }
-            #endregion
 
             L = (Cmax + Cmin) / 2;
 
@@ -98,8 +64,6 @@ namespace STLParserProject
 
         public void setLightness(int L)
         {
-//             if (L<0||L>255)
-//                 throw new ArgumentException("Lightness must be range between 0 and 255!");
             L = (int)(minL + L * (255 - minL + 0.0) / 255);
             if (L < minL)
                 this.L = minL;
@@ -135,7 +99,7 @@ namespace STLParserProject
                 B = 255;
             if (B < 0)
                 B = 0; 
-            res = (int)(0xFF000000 | ((int)R) << 16 | ((int)G) << 8 | ((int)B));
+            res = (int)(0x000000 | ((int)R) << 16 | ((int)G) << 8 | ((int)B));
             return res;
         }
 
@@ -170,7 +134,6 @@ namespace STLParserProject
 
         public HSLM(int color)
         {
-//             this.minL = minL; 
             this.color = color;
             double R = ((color & 0xFF0000) >> 16) / 255.0;
             double G = ((color & 0x00FF00) >> 8) / 255.0;
@@ -227,12 +190,9 @@ namespace STLParserProject
             if (L < 0) L = 0;
             if (L > 1) L = 1;
 
-//             L = minL + L0 * (1 - minL);
-
             double R, G, B;
             int res = 0;
 
-//             H /= 60;
             double q = L < 0.5 ? L * (1 + S) : L + S - L * S;
             double p = 2 * L - q;
             R = hue2rgb(p, q, H + 1.0/3);
@@ -240,17 +200,6 @@ namespace STLParserProject
             B = hue2rgb(p, q, H - 1.0 / 3);
 
 
-//             double C = L > 0.5 ? (2 - 2 * L) * S : 2 * L * S;
-//             double m = L - C / 2;
-//             double X = (C * (1 - Math.Abs(H / 60 % 2.0 - 1)) + m);
-// //             double X = H > 60 ? C * (120 - H) / 60 + m : C * H / 60 + m;
-//             C += m;
-//             if (H < 60) { R = C; G = X; B = m; }
-//             else if (H < 120) { R = X; G = C; B = m; }
-//             else if (H < 180) { R = m; G = C; B = X; }
-//             else if (H < 240) { R = m; G = X; B = C; }
-//             else if (H < 300) { R = X; G = m; B = C; }
-//             else { R = C; G = 0; B = X; }
             R *= 255;
             G *= 255;
             B *= 255;

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using PlanetGenerator.Painter;
 using PlanetGenerator.SphereBuilder;
-using STLParserProject;
+using Painter;
 using System.Threading;
 
 namespace PlanetGenerator

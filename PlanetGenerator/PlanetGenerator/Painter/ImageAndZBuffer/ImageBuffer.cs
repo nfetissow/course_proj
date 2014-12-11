@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace STLParserProject
+namespace Painter
 {
     class ImageBuffer: ZBuffer
     {
@@ -57,7 +57,6 @@ namespace STLParserProject
 
             int yGroups = UIData.ThreadCounts;
             double yGroupWidth = (ymax - ymin + 0.0) / yGroups;
-            //(figures[0] as ChessBoard).drawBorderOfAllocatedCell(bits, zbits, frameHeight, frameWidth);
             Parallel.For(0, yGroups, j =>
             {
                 for (int i = figures.Count - 1; i >= 0; i--)

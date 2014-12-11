@@ -77,7 +77,6 @@
     </Compile>
     <Compile Include="Painter\CanvasAndFigure\Camera.cs" />
     <Compile Include="Painter\CanvasAndFigure\Figure.cs" />
-    <Compile Include="Painter\CanvasAndFigure\OpticalCharacteristics.cs" />
     <Compile Include="Painter\Canvas\Canvas.cs" />
     <Compile Include="Painter\Canvas\FastBitmap.cs" />
     <Compile Include="Painter\Commands\Command.cs" />
@@ -98,9 +97,6 @@
     <Compile Include="Painter\Lighting\LightningCalculator.cs" />
     <Compile Include="Painter\Lighting\LocalLightning.cs" />
     <Compile Include="Painter\Lighting\RGBColor.cs" />
-    <Compile Include="Painter\MaterialAndTexture\CylindricalTexture.cs" />
-    <Compile Include="Painter\MaterialAndTexture\Material.cs" />
-    <Compile Include="Painter\MaterialAndTexture\TriplanarTexture.cs" />
     <Compile Include="Painter\Requests\AllocateObjectRequest.cs" />
     <Compile Include="Painter\Requests\DeleteObjectRequest.cs" />
     <Compile Include="Painter\Requests\EmptyRequest.cs" />

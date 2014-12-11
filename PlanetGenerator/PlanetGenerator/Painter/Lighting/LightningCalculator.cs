@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace STLParserProject.LightningCode
+namespace Painter.LightningCode
 {
     class LightningCalculator
     {

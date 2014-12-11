@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.CompilerServices;
 
-namespace STLParserProject
+namespace Painter
 {
     class Canvas
     {

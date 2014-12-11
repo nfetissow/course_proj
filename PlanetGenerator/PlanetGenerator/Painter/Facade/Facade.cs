@@ -11,18 +11,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using PlanetGenerator.SphereBuilder;
 
-namespace STLParserProject
+namespace Painter
 {
-    // капец а не класс
     class Facade
     {
-//private ChessBoard chessBoard;
         private List<Figure> figureList = new List<Figure>();
         private List<Camera> cameraList = new List<Camera>();
         private List<Lightning> lightningList = new List<Lightning>();
 
         private ImageBuffer imageBuffer;
-        private List<Shadow> shadowList;
         private Canvas canvas;
 
         private ConcurrentQueue<Request> requests;
@@ -30,11 +27,9 @@ namespace STLParserProject
 
         private int prevCameraNum = 0;
 
-        //private FiguresCopiesMaker copyMaker;
         private volatile bool isRun = true;
         public bool canTransform = false;
         private bool frameCalculating;
-        //private int yGroups = 16;
 
         private TimeSpan seconds = DateTime.Now.TimeOfDay;
         private Label logger;
@@ -44,20 +39,9 @@ namespace STLParserProject
            
             figureList.Add(figure);
             cameraList.Add(new Camera(new Point3D(0, 0, 0), new Point3D(410, 840, 0),
-                new Point3D(410, 220, 0)));//boardBuilder.getCamera());
-            //cameraList.Add(new Camera(new Point3D(320, 320, 300), new Point3D(320, 320, 0),
-            //    new Point3D(330, 320, 300)));
-//             lightningList.Add(new GlobalLightning(new Point3D(-160, -160, 200), 1));
-            //lightningList.Add(new LocalLightning(new Point3D(320, 320, 300),  new Point3D(320, 320, 0), new Point3D(330, 320, 300), 0.9));
-            //cameraList.Add(lightningList.Last());
-            //lightningList.Add(new LocalLightning(new Point3D(160, 160, 300), new Point3D(320, 320, 0), new Point3D(170, 150, 300), 0.3));
-            //cameraList.Add(lightningList.Last());
-
+                new Point3D(410, 220, 0)));
+         
             imageBuffer = new ImageBuffer(canvas.Width, canvas.Height);
-//             shadowList = new List<Shadow>();
-//             for (int i = 0; i < lightningList.Count; i++)
-//                 shadowList.Add(new Shadow(lightningList[i], figureList, canvas.Width, canvas.Height));
-
             this.requests = queue;
             this.canvas = canvas;
             this.logger = logger;
@@ -86,8 +70,6 @@ namespace STLParserProject
                         calculateFrameRate(false);
                 }
             }
-
-            //fpsWriter.Close();
         }
 
         public void ThreadStop()
@@ -115,13 +97,10 @@ namespace STLParserProject
 
                     if (request is AllocateObjectRequest)
                     {
-                        //chessBoard.allocateCell(request as AllocateObjectRequest, cameraList[cameraNum]);
                         request = new ScaleRequest(request.getCameraNum(), SCALE_SIGN.MINUS, 0);
                     }
                     if (request is DeleteObjectRequest)
                     {
-                        //if (chessBoard.removeSelectedFigure() == true)
-                           // request = new ScaleRequest(request.getCameraNum(), SCALE_SIGN.MINUS, 0);
                     }
 
                     cameraTrasformMatrix = camera.getCameraTransformationMatrix(request);
@@ -137,7 +116,7 @@ namespace STLParserProject
                         succesfullDataCounter++;
                     }
                 }
-                while (/*succesfullDataCounter<=5 &&*/ requests.TryDequeue(out request));
+                while (requests.TryDequeue(out request));
 
                 prevCameraNum = cameraNum;
 
@@ -158,47 +137,9 @@ namespace STLParserProject
             
         }
 
-        static int posY = 0, posX = 0;
-        //public void addFigure(string fileName)
-        //{
-        //    canTransform = false;
-        //    try
-        //    {
-        //        while (frameCalculating == true)
-        //            Thread.Sleep(2);
-        //        for (int i = 0; i < 5; i++)
-        //            chessBoard.addFigure(fileName, cameraList);
-        //        ScaleRequest request = new ScaleRequest(-1, SCALE_SIGN.PLUS, 0);
-        //        requests.Enqueue(request);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex.Message);
-        //    }
-        //    canTransform = true;
-
-        //}
-
-        private static int lastTick;
-        private static int lastFrameRate;
-        private static int frameRate;
-        //StreamWriter fpsWriter = new StreamWriter("FPSData.txt");
-
 
         public void calculateFrameRate(bool inc)
         {
-            //if (System.Environment.TickCount - lastTick >= 1000 && canTransform == true)
-            //{
-            //    lastFrameRate = frameRate;
-            //    if (UIData.FPSWriteInFile == true)
-            //        fpsWriter.WriteLine("{0, -10}{1, -10}", UIData.ThreadCounts, lastFrameRate);
-            //    logger.Invoke(new Action(delegate() { logger.Text = "FPS: " + lastFrameRate; }));
-            //    frameRate = 0;
-            //    lastTick = System.Environment.TickCount;
-
-            //}
-            //if (inc)
-            //    frameRate++;
         }
 
         public void lightningAmpChangedHandler(int lightningSourceNum, double newValue)

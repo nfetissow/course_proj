@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace STLParserProject
+namespace Painter
 {
     enum SCALE_SIGN {PLUS, MINUS}
     class ScaleRequest: Request
