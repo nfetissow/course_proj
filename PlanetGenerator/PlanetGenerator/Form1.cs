@@ -230,6 +230,7 @@ namespace PlanetGenerator
 
             this.UseWaitCursor = false;
             this.BeginInvoke(new Action(()=> {btGenerate.Enabled = true;}));
+            this.BeginInvoke(new Action(() => { this.pbScene.Select(); }));
         }
   
         
@@ -288,6 +289,7 @@ namespace PlanetGenerator
                 this.BeginInvoke(new Action(() => { this.pbLoading.Value = 100; }));
                 this.UseWaitCursor = false;
                 this.BeginInvoke(new Action(() => { btGenerate.Enabled = true; }));
+                this.tbLegend.Lines = biomesLegend;
             }
         }
 
@@ -307,6 +309,7 @@ namespace PlanetGenerator
                 this.BeginInvoke(new Action(() => { this.pbLoading.Value = 100; }));
                 this.UseWaitCursor = false;
                 this.BeginInvoke(new Action(() => { btGenerate.Enabled = true; }));
+                this.tbLegend.Lines = elevationLegend;
             }
         }
 
@@ -327,6 +330,7 @@ namespace PlanetGenerator
                 this.BeginInvoke(new Action(() => { this.pbLoading.Value = 100; }));
                 this.UseWaitCursor = false;
                 this.BeginInvoke(new Action(() => { btGenerate.Enabled = true; }));
+                this.tbLegend.Lines = platesLegend;
             }
         }
 
@@ -362,6 +366,7 @@ namespace PlanetGenerator
         {
             this.btGenerate.Enabled = false;
             new Thread(() => { generatePlanet(); }).Start();
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -378,8 +383,26 @@ namespace PlanetGenerator
                 + "В этом же окне вы можете выбрать способ отображения модели: карту высот, литосферные плиты или природные зоны.\n"
                 + "В окне \"Дополнительные настройки\" Вы можете указать параметры генерируемой модели.\n"
                 + "Вы можете использовать мышь для вращения модели планеты. Для этого необходимо двигать мышью по окну вывода с зажатой ЛКМ.\n"
-                + "Вы можете также использовать клавиши W, A, S, D для вращения планеты.\n", "Справка");
+                + "Вы можете также использовать клавиши W, A, S, D для вращения планеты.\n"
+                + "-----------------------------------------------------------\n"
+                + "Автор программы - Фетисов Н. М.", "Справка");
         }
-        string[] biomesLegend = {"Условные обозначения", "Зеленый цвет обозначает поля и леса", "Желтый цвет обозначает пустыню", "Серые цвета обозначают горы и скалы"};
+        string[] biomesLegend = {   "Условные обозначения", 
+                                    "",
+                                    "Желтым цветом выделены зоны с высоким уровнем тепла и низкой влажностью",
+                                    "Темно-зеленым цветом выделены зоны с высокой влажностью и теплом", 
+                                    "Светло-зеленым цветом выделены зоны с низким уровнем тепла" ,
+                                    "Белым цветом выделены зоны с температурой меньше 0",
+                                    "Серые цвета обозначают горы и скалы"};
+        string[] elevationLegend = {    "Условные обозначения",
+                                        "",
+                                        "Чем темнее синий, тем глубже океан",
+                                        "Чем темнее коричневый, тем выше поверхность"
+                                   };
+        string[] platesLegend = {
+                                        "Условные обозначения",
+                                        "",
+                                        "Плиты обозначены разными цветами"
+                                };
     }
 }
