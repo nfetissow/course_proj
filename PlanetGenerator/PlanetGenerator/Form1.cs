@@ -138,7 +138,7 @@ namespace PlanetGenerator
 
         private void setSettings()
         {
-            this.rbHigh.Checked = true;
+            this.rbMedium.Checked = true;
             this.rbBiomes.Checked = true;
             this.tbHeatLevel.Value = 0;
             this.tbOceanicRate.Value = 70;
@@ -201,9 +201,7 @@ namespace PlanetGenerator
             this.BeginInvoke(new Action(() => { this.pbLoading.Value = 30; }));
             planet = PlanetGeneration.Planet.createPlanet(topology, UIData.tectonicPlateCount, UIData.oceanicRate, UIData.heatLevel, UIData.moistureLevel, 1000, rng);
             this.BeginInvoke(new Action(() => { this.pbLoading.Value = 70; }));
-            requests = new ConcurrentQueue<Request>();
-            canvas = new Canvas(this.pbScene);
-
+            
             Polyhedron.determineColor set = Polyhedron.showBiomes;
             if(UIData.surfaceDisplaySettings == "biomes")
             {
@@ -217,6 +215,10 @@ namespace PlanetGenerator
             {
                 set = Polyhedron.showPlates;
             }
+
+            requests = new ConcurrentQueue<Request>();
+            canvas = new Canvas(this.pbScene);
+
 
             facade = new Facade(canvas, requests, label1, Figure.fromPolyhedronMesh(planet, set));
             this.BeginInvoke(new Action(() => { this.pbLoading.Value = 90; }));
@@ -274,7 +276,18 @@ namespace PlanetGenerator
         {
             if(this.rbBiomes.Checked)
             {
+                this.UseWaitCursor = true;
+                this.BeginInvoke(new Action(() => { this.pbLoading.Value = 0; }));
+                requests = new ConcurrentQueue<Request>();
+                canvas = new Canvas(this.pbScene);
+
                 UIData.surfaceDisplaySettings = "biomes";
+                facade = new Facade(canvas, requests, label1, Figure.fromPolyhedronMesh(planet, Polyhedron.showBiomes));
+                facade.canTransform = true;
+                requests.Enqueue(new ScaleRequest(-1, SCALE_SIGN.MINUS, 0));
+                this.BeginInvoke(new Action(() => { this.pbLoading.Value = 100; }));
+                this.UseWaitCursor = false;
+                this.BeginInvoke(new Action(() => { btGenerate.Enabled = true; }));
             }
         }
 
@@ -282,7 +295,18 @@ namespace PlanetGenerator
         {
             if(this.rbHeightMap.Checked)
             {
+                this.UseWaitCursor = true;
+                this.BeginInvoke(new Action(() => { this.pbLoading.Value = 0; }));
+
+                requests = new ConcurrentQueue<Request>();
+                canvas = new Canvas(this.pbScene);
                 UIData.surfaceDisplaySettings = "height";
+                facade = new Facade(canvas, requests, label1, Figure.fromPolyhedronMesh(planet, Polyhedron.showElevation));
+                facade.canTransform = true;
+                requests.Enqueue(new ScaleRequest(-1, SCALE_SIGN.MINUS, 0));
+                this.BeginInvoke(new Action(() => { this.pbLoading.Value = 100; }));
+                this.UseWaitCursor = false;
+                this.BeginInvoke(new Action(() => { btGenerate.Enabled = true; }));
             }
         }
 
@@ -290,7 +314,19 @@ namespace PlanetGenerator
         {
             if(this.rbPlates.Checked)
             {
+                this.UseWaitCursor = true;
+                this.BeginInvoke(new Action(() => { this.pbLoading.Value = 0; }));
+
+                requests = new ConcurrentQueue<Request>();
+                canvas = new Canvas(this.pbScene);
+                               
                 UIData.surfaceDisplaySettings = "plates";
+                facade = new Facade(canvas, requests, label1, Figure.fromPolyhedronMesh(planet, Polyhedron.showPlates));
+                facade.canTransform = true;
+                requests.Enqueue(new ScaleRequest(-1, SCALE_SIGN.MINUS, 0));
+                this.BeginInvoke(new Action(() => { this.pbLoading.Value = 100; }));
+                this.UseWaitCursor = false;
+                this.BeginInvoke(new Action(() => { btGenerate.Enabled = true; }));
             }
         }
 
@@ -331,7 +367,7 @@ namespace PlanetGenerator
         private void Form1_Load(object sender, EventArgs e)
         {
             generatePlanet();
-            this.tbLegend.Text = biomesLegend;
+            this.tbLegend.Lines = biomesLegend;
         }
 
         private void btHelp_Click(object sender, EventArgs e)
@@ -344,6 +380,6 @@ namespace PlanetGenerator
                 + "Вы можете использовать мышь для вращения модели планеты. Для этого необходимо двигать мышью по окну вывода с зажатой ЛКМ.\n"
                 + "Вы можете также использовать клавиши W, A, S, D для вращения планеты.\n", "Справка");
         }
-        const string biomesLegend = "Условные обозначения\nЗеленый цвет обозначает поля и леса\nЖелтый цвет обозначает пустыню\nСерые цвета обозначают горы и скалы\n";
+        string[] biomesLegend = {"Условные обозначения", "Зеленый цвет обозначает поля и леса", "Желтый цвет обозначает пустыню", "Серые цвета обозначают горы и скалы"};
     }
 }
