@@ -442,7 +442,7 @@
             // 
             this.tbDetailLevel.Location = new System.Drawing.Point(30, 53);
             this.tbDetailLevel.Maximum = 100;
-            this.tbDetailLevel.Minimum = 4;
+            this.tbDetailLevel.Minimum = 8;
             this.tbDetailLevel.Name = "tbDetailLevel";
             this.tbDetailLevel.Size = new System.Drawing.Size(142, 45);
             this.tbDetailLevel.TabIndex = 0;
