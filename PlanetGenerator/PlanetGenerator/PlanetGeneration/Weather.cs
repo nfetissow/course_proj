@@ -116,10 +116,6 @@ namespace PlanetGenerator.PlanetGeneration
                 {
                     var whorl = whorls[j];
                     var angle = whorl.center.angleTo(corner.pos);
-                    if (Double.IsNaN(angle))
-                    {
-                        int b = 1;
-                    }//ANGLETO - HANDMADE FUNCTION
                     var distance = Math.Cos(angle) * planetRadius;
                     if (distance < whorl.radius)
                     {

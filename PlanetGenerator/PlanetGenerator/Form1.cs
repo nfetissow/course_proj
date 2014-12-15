@@ -404,5 +404,10 @@ namespace PlanetGenerator
                                         "",
                                         "Плиты обозначены разными цветами"
                                 };
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.facade.ThreadStop();
+        }
     }
 }
